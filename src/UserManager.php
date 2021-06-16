@@ -147,7 +147,7 @@ class UserManager implements UserManagement {
 				$args,
 				[
 					'ID'         => $uid,
-					'email'      => null,
+					'user_email' => null,
 					'first_name' => '',
 					'last_name'  => '',
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),

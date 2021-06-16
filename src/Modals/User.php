@@ -26,7 +26,7 @@ class User {
 	 */
 	public $setters = [
 		'ID',
-		'email',
+		'user_email',
 		'first_name',
 		'last_name',
 		'user_login',
@@ -61,32 +61,32 @@ class User {
 	/**
 	 * Validate email address.
 	 */
-	public function validate_email() {
+	public function validate_user_email() {
 		/**
 		 * Email can be skipped during updation.
 		 */
-		if ( 'update' === self::$context && empty ( $this->email ) ) {
+		if ( 'update' === self::$context && empty ( $this->user_email ) ) {
 			return;
 		}
 
 		/**
 		 * Email is mandatory during registration.
 		 */
-		if ( 'create' === self::$context && empty( $this->email ) ) {
+		if ( 'create' === self::$context && empty( $this->user_email ) ) {
 			throw new InvalidArgumentException( __( 'Please provide email address', 'temporary-access' ) );
 		}
 
 		/**
 		 * Email should not be already in use.
 		 */
-		if ( 'create' === self::$context && email_exists( $this->email ) ) {
+		if ( 'create' === self::$context && email_exists( $this->user_email ) ) {
 			throw new InvalidArgumentException( __( 'Email is already associated with an account. Please use different email address', 'temporary-access' ) );
 		}
 
 		/**
 		 * Finally, email needs to be a valid one.
 		 */
-		if ( ! empty( $this->email ) && ! filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
+		if ( ! empty( $this->user_email ) && ! filter_var( $this->user_email, FILTER_VALIDATE_EMAIL ) ) {
 			throw new InvalidArgumentException( __( 'Invalid email address', 'temporary-access' ) );
 		}
 

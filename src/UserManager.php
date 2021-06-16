@@ -151,13 +151,11 @@ class UserManager implements UserManagement {
 					'first_name' => '',
 					'last_name'  => '',
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
-					'user_pass'  => wp_generate_password( 16 ),
 					'user_login' => 'user_' . time(),
 				]
 			);
 
 			$user_modal = new User( $args, 'update' );
-
 			$user       = wp_update_user( get_object_vars( $user_modal ) );
 
 			if ( is_wp_error( $user ) ) {

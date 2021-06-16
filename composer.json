@@ -1,0 +1,21 @@
+{
+    "name": "ankit/temporary-access",
+    "authors": [
+        {
+            "name": "Ankit Gade",
+            "email": "contact@sharethingz.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Ankit\\TemporaryAccess\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "Ankit\\TemporaryAccess\\Tests\\": "tests/php"
+    },
+    "require": {
+        "php": ">=7.3",
+        "pimple/pimple": "3.*"
+    }
+}

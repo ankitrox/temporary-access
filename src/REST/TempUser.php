@@ -1,0 +1,135 @@
+<?php
+/**
+ * Endpoint to manage temporary user.
+ *
+ * @package Ankit\TemporaryAccess
+ * @since 1.0.0
+ */
+
+declare(strict_types=1);
+
+namespace Ankit\TemporaryAccess\REST;
+
+use Ankit\TemporaryAccess\Interfaces\UserManagement;
+use WP_REST_Server;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_Error;
+use Throwable;
+
+/**
+ * Class TempUser
+ *
+ * @package Ankit\TemporaryAccess\REST
+ */
+class TempUser {
+
+	/**
+	 * Endpoint namespace.
+	 *
+	 * @var string
+	 */
+	private $namespace = 'tempaccess/v1';
+
+	/**
+	 * User manager object.
+	 *
+	 * @var UserManagement
+	 */
+	private $user_manager;
+
+	/**
+	 * TempUser constructor.
+	 *
+	 * @param UserManagement $user_manager User manager.
+	 */
+	public function __construct( UserManagement $user_manager ) {
+		$this->user_manager = $user_manager;
+	}
+
+	/**
+	 * Permission check for accessing endpoints.
+	 *
+	 * @return bool
+	 */
+	public function permission_check(): bool {
+		return current_user_can( 'edit_users' );
+	}
+
+	/**
+	 * Register the endpoint.
+	 *
+	 * @return void
+	 */
+	public function register(): void {
+
+		register_rest_route(
+			$this->namespace,
+			'/users',
+			[
+				[
+					'methods'  => WP_REST_Server::READABLE,
+					'callback' => [ $this, 'get_users' ],
+				],
+				[
+					'methods'  => WP_REST_Server::CREATABLE,
+					'callback' => [ $this, 'create_user' ],
+				],
+				'permission_callback' => [ $this, 'permission_check' ],
+				'args'                => [],
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
+			'/users/(?P<id>\d+)',
+			[
+				[
+					'methods'  => WP_REST_Server::EDITABLE,
+					'callback' => [ $this, 'update_user' ],
+				],
+				[
+					'methods'  => WP_REST_Server::DELETABLE,
+					'callback' => [ $this, 'delete_user' ],
+				],
+				'permission_callback' => [ $this, 'permission_check' ],
+				'args'                => [],
+			]
+		);
+	}
+
+	/**
+	 * Try to create the new user. Send the user object on success
+	 * or send error on failure.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function create_user( WP_REST_Request $request ) {
+		try {
+
+			$user = $this->user_manager->create( $request->get_params() );
+
+			return new WP_REST_Response( $user );
+
+		} catch ( Throwable $e ) {
+
+			do_action( 'tempaccess.api_error', $e );
+
+			return new WP_Error( 'user_creation_failed', $e->getMessage() );
+		}
+	}
+
+	public function get_users( WP_REST_Request $request ) {
+
+	}
+
+	public function update_user( WP_REST_Request $request ) {
+
+	}
+
+	public function delete_user( WP_REST_Request $request ) {
+
+	}
+}

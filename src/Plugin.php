@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace Ankit\TemporaryAccess;
 
 use Ankit\TemporaryAccess\Interfaces\Container as ContainerInterface;
+use Ankit\TemporaryAccess\Interfaces\UserManagement;
+use Ankit\TemporaryAccess\REST\TempUser;
 
 /**
  * Class Plugin
@@ -48,6 +50,27 @@ class Plugin {
 	public $assets_dir;
 
 	/**
+	 * User manager.
+	 *
+	 * @var UserManagement
+	 */
+	private $user_manager;
+
+	/**
+	 * Endpoint service.
+	 *
+	 * @var TempUser
+	 */
+	private $user_endpoint;
+
+	/**
+	 * Authentication service.
+	 *
+	 * @var Authenticator
+	 */
+	private $authenticator;
+
+	/**
 	 * DI Container.
 	 *
 	 * @var Container
@@ -77,8 +100,15 @@ class Plugin {
 	public function run(): void {
 		$this->container->define_services();
 
-		add_action( 'init', [ $this->container->get( 'user_manager' ), 'init' ] );
-		add_action( 'rest_api_init', [ $this->container->get( 'temp_user_endpoint' ), 'register' ] );
+		$this->user_manager  = $this->container->get( 'user_manager' );
+		$this->user_endpoint = $this->container->get( 'temp_user_endpoint' );
+		$this->authenticator = $this->container->get( 'authenticator' );
+
+		$this->authenticator->init();
+
+		add_action( 'init', [ $this->user_manager, 'init' ] );
+		add_action( 'rest_api_init', [ $this->user_endpoint, 'register' ] );
+		add_action( 'init', [ $this, 'load_translations' ] );
 	}
 
 	/**

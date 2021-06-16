@@ -81,6 +81,17 @@ class Container implements ContainerInterface {
 		};
 
 		/**
+		 * Authentication service.
+		 *
+		 * @param PimpleContainer $c
+		 *
+		 * @return Authenticator
+		 */
+		$this->container['authenticator'] = function( PimpleContainer $c ) {
+			return new Authenticator( $c['user_manager'] );
+		};
+
+		/**
 		 * Define REST API endpoint service to add endpoint to WordPress.
 		 *
 		 * @param PimpleContainer $c Pimple container object.

@@ -66,4 +66,11 @@ interface UserManagement {
 	 * @return bool
 	 */
 	public function delete( int $uid ): bool;
+
+	/**
+	 * Fetch the user by token.
+	 *
+	 * @return mixed
+	 */
+	public function get_user_by_token( string $token ): int;
 }

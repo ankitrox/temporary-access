@@ -210,6 +210,31 @@ class UserManager implements UserManagement {
 	}
 
 	/**
+	 * Fetch user by token.
+	 *
+	 * @param string $token User token.
+	 *
+	 * @return int
+	 */
+	public function get_user_by_token( string $token ): int {
+		$user_args = [
+			'meta_key'   => UserManagement::TOKEN_KEY,
+			'meta_value' => $token,
+		];
+
+		$user = get_users( $user_args );
+
+		if ( ! empty ( $user ) ) {
+			/** @var WP_User $user */
+			$user = array_pop( $user );
+
+			return $user->ID;
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Associate meta information to newly created temporary user.
 	 *
 	 * @param WP_User $user User object.

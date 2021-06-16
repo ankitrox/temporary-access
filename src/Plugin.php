@@ -108,6 +108,7 @@ class Plugin {
 
 		add_action( 'init', [ $this->user_manager, 'init' ] );
 		add_action( 'rest_api_init', [ $this->user_endpoint, 'register' ] );
+		add_action( 'tempaccess.user_authenticated', [ $this->user_manager, 'post_login_actions' ] );
 		add_action( 'init', [ $this, 'load_translations' ] );
 	}
 

@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace Ankit\TemporaryAccess;
 
 use Ankit\TemporaryAccess\Interfaces\UserManagement;
-use WP_User;
-use WP_Error;
 use Ankit\TemporaryAccess\Utils\Helper;
 
 /**
@@ -44,31 +42,44 @@ class Authenticator {
 	 * @return void
 	 */
 	public function init(): void {
-		add_action( 'authenticate', [ $this, 'authenticate' ] );
+		add_action( 'init', [ $this, 'authenticate' ], 5 );
 	}
 
 	/**
 	 * Authenticate the user based on token.
 	 *
-	 * @return WP_User|WP_Error
+	 * @return void
 	 */
-	public function authenticate( $user = null ) {
-		if ( $user instanceof WP_User ) {
-			return $user;
-		}
-
+	public function authenticate() {
 		$token = Helper::filter_input( INPUT_GET, 'tempaccess_token', FILTER_SANITIZE_STRING );
 
 		if ( ! $token ) {
-			return $user;
+			return;
 		}
 
 		$user_id = $this->user_manager->get_user_by_token( $token );
 
 		if ( ! $user_id ) {
-			return new WP_Error( 'no_user_found', __( 'No user found for this token', 'temporary-access' ) );
+			return;
 		}
 
-		return get_user_by( 'id', $user_id );
+		$user_data     = get_user_by( 'id', $user_id );
+		$perform_login = true;
+
+		if ( is_user_logged_in() ) {
+			if ( $user_id !== get_current_user_id() ) {
+				wp_logout();
+			} else {
+				$perform_login = false;
+			}
+		}
+
+		if ( $perform_login ) {
+			wp_clear_auth_cookie();
+			wp_set_current_user( $user_id, $user_data->user_login );
+			wp_set_auth_cookie( $user_id );
+
+			do_action( 'tempaccess.user_authenticated', $user_data );
+		}
 	}
 }

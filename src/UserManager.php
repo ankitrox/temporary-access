@@ -262,4 +262,18 @@ class UserManager implements UserManagement {
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );
 		}
 	}
+
+	/**
+	 * Redirect temporary user post-login.
+	 *
+	 * @param WP_User $user User object.
+	 *
+	 * @return void
+	 */
+	public function post_login_actions( WP_User $user ) {
+		update_user_meta( $user->ID, 'tempaccess_last_login', time() );
+
+		wp_redirect( admin_url() );
+		die;
+	}
 }

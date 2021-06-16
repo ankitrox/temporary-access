@@ -257,7 +257,8 @@ class UserManager implements UserManagement {
 		 * Token would only be generated during user creation.
 		 */
 		if ( 'tempaccess.user_created' === current_action() ) {
-			$token           = $user->ID . time() . uniqid( '', true );
+			$token = $user->ID . time() . uniqid( '', true );
+			$token = md5( $token );
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );
 		}
 	}

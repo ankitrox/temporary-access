@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Ankit\TemporaryAccess\Modals;
 
+use Exception;
 use InvalidArgumentException;
 
 /**
@@ -24,7 +25,7 @@ class User {
 	 * @var string[]
 	 */
 	public $setters = [
-		'id',
+		'ID',
 		'email',
 		'first_name',
 		'last_name',
@@ -33,12 +34,17 @@ class User {
 		'user_pass',
 	];
 
+	public static $context;
+
 	/**
 	 * User constructor.
 	 *
-	 * @param array $data User data.
+	 * @param array  $data    User data.
+	 * @param string $context Context in which object is being used. Create/Update.
 	 */
-	public function __construct( array $data = [] ) {
+	public function __construct( array $data = [], string $context = 'create' ) {
+		self::$context = $context;
+
 		foreach ( $data as $k => $v ) {
 			if ( in_array( $k, $this->setters, true ) ) {
 				$this->{$k} = $v;
@@ -56,17 +62,58 @@ class User {
 	 * Validate email address.
 	 */
 	public function validate_email() {
-		if ( empty( $this->email ) || ! filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new InvalidArgumentException( __( 'Invalid email', 'temporary-access' ) );
+		/**
+		 * Email can be skipped during updation.
+		 */
+		if ( 'update' === self::$context && empty ( $this->email ) ) {
+			return;
 		}
+
+		/**
+		 * Email is mandatory during registration.
+		 */
+		if ( 'create' === self::$context && empty( $this->email ) ) {
+			throw new InvalidArgumentException( __( 'Please provide email address', 'temporary-access' ) );
+		}
+
+		/**
+		 * Email should not be already in use.
+		 */
+		if ( 'create' === self::$context && email_exists( $this->email ) ) {
+			throw new InvalidArgumentException( __( 'Email is already associated with an account. Please use different email address', 'temporary-access' ) );
+		}
+
+		/**
+		 * Finally, email needs to be a valid one.
+		 */
+		if ( ! empty( $this->email ) && ! filter_var( $this->email, FILTER_VALIDATE_EMAIL ) ) {
+			throw new InvalidArgumentException( __( 'Invalid email address', 'temporary-access' ) );
+		}
+
 	}
 
 	public function validate_role() {
+		/**
+		 * Email can be skipped during updation.
+		 */
+		if ( 'update' === self::$context && empty ( $this->role ) ) {
+			return;
+		}
+
 		$roles = wp_roles()->roles;
 		$roles = array_keys( $roles );
 
 		if ( ! in_array( $this->role, $roles, true ) ) {
 			throw new InvalidArgumentException( __( 'Invalid role selected', 'temporary-access' ) );
+		}
+	}
+
+	public function validate_id() {
+		if ( ! empty ( $this->id ) ) {
+			$user = get_user_by( 'id', (int) $this->id );
+			if ( ! $user ) {
+				throw new Exception( __( 'Invalid ID specified for the user.', 'temporary-access' ) );
+			}
 		}
 	}
 }

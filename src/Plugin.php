@@ -89,4 +89,13 @@ class Plugin {
 	public function load_translations(): void {
 		load_plugin_textdomain( 'temporary-access', false, basename( plugin()->path ) . '/languages/' . get_locale() );
 	}
+
+	/**
+	 * Return container object
+	 *
+	 * @return ContainerInterface
+	 */
+	public function container(): ContainerInterface {
+		return $this->container;
+	}
 }

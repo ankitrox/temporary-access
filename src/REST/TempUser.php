@@ -16,6 +16,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
 use Throwable;
+use Exception;
 
 /**
  * Class TempUser
@@ -82,8 +83,12 @@ class TempUser {
 
 		register_rest_route(
 			$this->namespace,
-			'/users/(?P<id>\d+)',
+			'/users/(?P<ID>\d+)',
 			[
+				[
+					'methods'  => WP_REST_Server::READABLE,
+					'callback' => [ $this, 'get_users' ],
+				],
 				[
 					'methods'  => WP_REST_Server::EDITABLE,
 					'callback' => [ $this, 'update_user' ],
@@ -121,15 +126,69 @@ class TempUser {
 		}
 	}
 
+	/**
+	 * Retrieve users based on the requested criteria.
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
 	public function get_users( WP_REST_Request $request ) {
+		try {
 
+			$users = $this->user_manager->read( (int) $request->get_param( 'ID' ), $request->get_params() );
+
+			return new WP_REST_Response( $users );
+
+		} catch ( Throwable $e ) {
+
+			do_action( 'tempaccess.api_error', $e );
+
+			return new WP_Error( 'user_fetch_failed', $e->getMessage() );
+		}
 	}
 
+	/**
+	 * Update temporary user's data
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
 	public function update_user( WP_REST_Request $request ) {
+		try {
+			$user = $this->user_manager->update( (int) $request->get_param( 'ID' ), $request->get_params() );
 
+			return new WP_REST_Response( $user );
+
+		} catch ( Throwable $e ) {
+
+			do_action( 'tempaccess.api_error', $e );
+
+			return new WP_Error( 'user_update_failed', $e->getMessage() );
+		}
 	}
 
+	/**
+	 * Delete temporary user's account.
+	 *
+	 * @param WP_REST_Request $request
+	 */
 	public function delete_user( WP_REST_Request $request ) {
+		try {
+			$delete = $this->user_manager->delete( (int) $request->get_param( 'ID' ) );
 
+			if ( $delete ) {
+				return new WP_REST_Response( __( 'User has been deleted successfully', 'temporary-access' ) );
+			}
+
+			throw new Exception( __( 'Could not delete the user. Please try again.', 'temporray-access' ) );
+
+		} catch ( Throwable $e ) {
+
+			do_action( 'tempaccess.api_error', $e );
+
+			return new WP_Error( 'user_update_failed', $e->getMessage() );
+		}
 	}
 }

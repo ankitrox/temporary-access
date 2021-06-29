@@ -42,10 +42,14 @@ class APIUser {
 	 * @return \stdClass
 	 */
 	public function get_modal(): \stdClass {
+		$user = get_user_by( 'id', $this->user_id );
 		/** @var UserManagement $user_manager */
 		$user_manager         = plugin()->container()->get( 'user_manager' );
 		$user_obj             = new \stdClass();
 		$user_obj->ID         = $this->user_id;
+		$user_obj->first_name = $user->first_name;
+		$user_obj->last_name  = $user->last_name;
+		$user_obj->email      = $user->data->user_email;
 		$user_obj->token      = get_user_meta( $this->user_id, $user_manager::TOKEN_KEY, true );
 		$user_obj->expiration = get_user_meta( $this->user_id, $user_manager::EXPIRATION_KEY, true );
 		$user_obj->_login_url = add_query_arg(

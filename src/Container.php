@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Ankit\TemporaryAccess;
 
 use Ankit\TemporaryAccess\Interfaces\Container as ContainerInterface;
+use Ankit\TemporaryAccess\UI\Settings;
 use InvalidArgumentException;
 use Pimple\Container as PimpleContainer;
 use Ankit\TemporaryAccess\REST\TempUser;
@@ -100,6 +101,17 @@ class Container implements ContainerInterface {
 		 */
 		$this->container['temp_user_endpoint'] = function( PimpleContainer $c ) {
 			return new TempUser( $c['user_manager'] );
+		};
+
+		/**
+		 * Settings service.
+		 *
+		 * @param PimpleContainer $c Pimple container object.
+		 *
+		 * @return Settings
+		 */
+		$this->container['settings'] = function( PimpleContainer $c ) {
+			return new Settings();
 		};
 
 	}

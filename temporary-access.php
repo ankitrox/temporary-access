@@ -7,6 +7,7 @@
  * License: GPLv3+
  * Requires at least: 5.4.2
  * Requires PHP: 7.3
+ * Text-Domain: temporary-access
  *
  * @package Ankit\TemporaryAccess
  * @since 1.0.0

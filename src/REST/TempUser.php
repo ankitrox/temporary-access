@@ -30,7 +30,7 @@ class TempUser {
 	 *
 	 * @var string
 	 */
-	private $namespace = 'tempaccess/v1';
+	const NAMESPACE = 'tempaccess/v1';
 
 	/**
 	 * User manager object.
@@ -65,7 +65,7 @@ class TempUser {
 	public function register(): void {
 
 		register_rest_route(
-			$this->namespace,
+			self::NAMESPACE,
 			'/users',
 			[
 				[
@@ -82,7 +82,7 @@ class TempUser {
 		);
 
 		register_rest_route(
-			$this->namespace,
+			self::NAMESPACE,
 			'/users/(?P<ID>\d+)',
 			[
 				[

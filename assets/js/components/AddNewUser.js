@@ -12,6 +12,7 @@ let AddNewUser = ( props ) => {
                 text={ __( 'Add New User', 'temporary-access' ) }
                 isSecondary
                 onClick={ onclick }
+                className={ "add_new-button" }
             />
         </>
     );

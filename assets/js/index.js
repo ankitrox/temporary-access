@@ -1,5 +1,6 @@
 import Store from './store';
 import TempAccess from './components/TempAccess';
+import '../css/tempaccess.scss';
 
 const { subscribe } = wp.data;
 const { register } = wp.data;

@@ -52,6 +52,21 @@ const actions = {
             type: 'SET_CONTEXT',
             context
         }
+    },
+
+    setNotifier( { type, message } ) {
+        return {
+            type: 'SET_NOTIFIER',
+            n_type: type,
+            message
+        }
+    },
+
+    setProcessing( processing ) {
+        return {
+            type: 'SET_PROCESSING',
+            processing
+        }
     }
 };
 

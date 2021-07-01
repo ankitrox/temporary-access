@@ -1,0 +1,30 @@
+#temp-access-root {
+  .tempaccess_editform, .add_new-button {
+    margin: 1em 0;
+  }
+
+  .tempaccess_editform {
+    & > .components-base-control {
+      margin: 1em 0;
+    }
+  }
+
+  .tempaccess_action_buttons button {
+    margin-left: 20px;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  .components-base-control__label, .components-input-control__label {
+    font-size: 1.2em;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  #temp-access-root {
+    .tempaccess_editform {
+      max-width: 40%;
+    }
+  }
+}

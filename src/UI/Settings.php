@@ -32,7 +32,16 @@ class Settings {
         add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
     }
 
-	public function scripts() {
+	/**
+     * Add scripts and styles to settings page.
+     *
+	 * @param string $page_hook Page hook.
+	 */
+	public function scripts( string $page_hook ): void {
+        if ( 'users_page_wp-temporary-access' !== $page_hook ) {
+            return;
+        }
+
 		wp_register_script(
 			'wp-temp-access',
 			trailingslashit( plugin()->url ) . 'assets/build/index.js',
@@ -52,9 +61,11 @@ class Settings {
 		);
 
 		$blog_id = is_multisite() ? get_current_blog_id() : null;
-
-		$data = [
-			'path' => get_rest_url( $blog_id, trailingslashit( TempUser::NAMESPACE ) . 'users' )
+		$roles   = wp_list_pluck( wp_roles()->roles, 'name' );
+		$data    = [
+			'path'  => get_rest_url( $blog_id, trailingslashit( TempUser::NAMESPACE ) . 'users' ),
+			'roles' => $roles,
+            'nonce' => wp_create_nonce( 'wp_rest' ),
 		];
 
 		wp_add_inline_script(
@@ -65,6 +76,12 @@ class Settings {
 
 		wp_enqueue_script( 'wp-temp-access' );
 		wp_enqueue_style( 'wp-components' );
+		wp_enqueue_style(
+			'temp-access-css',
+			trailingslashit( plugin()->url ) . 'assets/build/index.css',
+            [],
+			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.css' ),
+		);
 	}
 
 	/**

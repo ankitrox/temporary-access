@@ -31,7 +31,9 @@ class User {
 		'last_name',
 		'user_login',
 		'role',
-		'user_pass',
+		'start_date',
+		'end_date',
+		'redirect',
 	];
 
 	public static $context;

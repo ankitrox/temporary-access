@@ -50,6 +50,7 @@ class APIUser {
 		$user_obj->first_name = $user->first_name;
 		$user_obj->last_name  = $user->last_name;
 		$user_obj->email      = $user->data->user_email;
+		$user_obj->user_login = $user->data->user_login;
 		$user_obj->token      = get_user_meta( $this->user_id, $user_manager::TOKEN_KEY, true );
 		$user_obj->expiration = get_user_meta( $this->user_id, $user_manager::EXPIRATION_KEY, true );
 		$user_obj->_login_url = add_query_arg(

@@ -6,7 +6,6 @@
 const selectors = {
 
     getUsers( state ) {
-
         return state.users;
     },
 
@@ -16,6 +15,18 @@ const selectors = {
 
     getContext( state ) {
         return state.context;
+    },
+
+    getCurrentEditData( state ) {
+        return state.current;
+    },
+
+    getNotifier( state ) {
+        return state.notifier;
+    },
+
+    isProcessing( state ) {
+        return state.processing;
     }
 };
 

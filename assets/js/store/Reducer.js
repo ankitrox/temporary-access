@@ -31,6 +31,21 @@ const reducer = ( state = DefaultState, action ) => {
                 ...state,
                 context: action.context
             }
+
+        case 'SET_PROCESSING':
+            return {
+                ...state,
+                processing: action.processing
+            }
+
+        case 'SET_NOTIFIER':
+            return {
+                ...state,
+                notifier: {
+                    type: action.n_type,
+                    message: action.message
+                }
+            }
     }
 
     return state;

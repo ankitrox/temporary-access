@@ -14,6 +14,7 @@ use Ankit\TemporaryAccess\Modals\APIUser;
 use Ankit\TemporaryAccess\Modals\User;
 use Ankit\TemporaryAccess\Interfaces\UserManagement;
 use Exception;
+use Throwable;
 use InvalidArgumentException;
 use WP_User;
 
@@ -55,6 +56,9 @@ class UserManager implements UserManagement {
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
 					'user_pass'  => wp_generate_password( 16 ),
 					'user_login' => 'user_' . time(),
+					'start_date' => strtotime('now'),
+					'end_date'   => strtotime( '+1 day' ),
+					'redirect'   => admin_url(),
 				]
 			);
 
@@ -132,10 +136,11 @@ class UserManager implements UserManagement {
 	/**
 	 * Update an existing temporary user.
 	 *
-	 * @param int $uid User ID.
+	 * @param int|null $uid User ID.
 	 * @param array $args User args.
 	 *
 	 * @return \stdClass
+	 * @throws Throwable Exception for user update.
 	 */
 	public function update( int $uid = null, array $args = [] ): \stdClass {
 		if ( ! $uid ) {

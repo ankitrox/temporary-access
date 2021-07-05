@@ -46,6 +46,12 @@ const reducer = ( state = DefaultState, action ) => {
                     message: action.message
                 }
             }
+
+        case 'RESET':
+            return {
+                ...state,
+                current: DefaultState.current
+            }
     }
 
     return state;

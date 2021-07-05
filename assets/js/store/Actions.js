@@ -67,6 +67,12 @@ const actions = {
             type: 'SET_PROCESSING',
             processing
         }
+    },
+
+    reset() {
+        return {
+            type: 'RESET'
+        }
     }
 };
 

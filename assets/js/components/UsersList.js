@@ -1,15 +1,15 @@
 import name from '../store/name';
+import { SetCurrentUserForEdit } from "../../utils";
 
-const { withDispatch, withSelect, dispatch } = wp.data;
-const { map, isEmpty } = window.lodash;
-const { sprintf } = wp.i18n;
-const {
-    Spacer
-} = wp.components;
+const { withDispatch, withSelect } = wp.data;
+const { map, isEmpty, findIndex } = window.lodash;
+const { sprintf, __ } = wp.i18n;
+const { Dashicon } = wp.components;
 
-const UserData = ( { user } ) => {
+const UserData = ( { user, onEdit, onDelete } ) => {
     const {
-        email,
+        ID,
+        user_email,
         first_name,
         last_name,
         user_login
@@ -18,9 +18,20 @@ const UserData = ( { user } ) => {
     return (
         <>
             <div className={ 'temp__user_data' }>
-                <span className={ 'temp__name' }>{ isEmpty( first_name ) && isEmpty( last_name ) ? email : sprintf( '%1s %2s (%3s)', first_name, last_name, email ) }</span>
-                <span className={ 'temp__user__login' }>{ user_login }</span>
-
+                <div className={ 'temp_user_data_item' }>{ isEmpty( first_name ) && isEmpty( last_name ) ? user_email : sprintf( '%1s %2s (%3s)', first_name, last_name, user_email ) }</div>
+                <div className={ 'temp_user_data_item' }>{ user_login }</div>
+                <div className={ 'temp_user_data_item' }>
+                    <Dashicon
+                        icon={'edit'} style={ { cursor: 'pointer' } }
+                        onClick={ () => onEdit( ID ) }
+                    />
+                </div>
+                <div className={ 'temp_user_data_item' }>
+                    <Dashicon
+                        icon={'trash'} style={ { cursor: 'pointer' } }
+                        onClick={ () => onDelete( ID ) }
+                    />
+                </div>
             </div>
         </>
     );
@@ -28,25 +39,48 @@ const UserData = ( { user } ) => {
 
 let UsersList = ( props ) => {
     const { usersList } = props;
+    const Headings = [
+        __( 'Name', 'temporary-access' ),
+        __( 'Username', 'temporary-access' ),
+        __( 'Edit', 'temporary-access' ),
+        __( 'Delete', 'temporary-access' ),
+    ];
 
     return (
         <>
-            { usersList.length && (
+            { usersList.length > 0 && (
              <div className={'userslist_wrapper'}>
-                 { map( usersList, ( user ) => <UserData user={ user } /> ) }
+                 <div className={ 'temp__user_data temp__user_data_headings' }>
+                     { map( Headings, (heading) => <div className={ 'temp_user_data_item temp_user_item_heading' }>{ sprintf( __( '%s', 'temporary-access' ), heading ) }</div> ) }
+                 </div>
+                 { map( usersList, ( user ) => <UserData user={user} {...props} /> ) }
              </div>
             )}
+
+            { ! usersList.length && <p className={'tempaccess__no_users'}>{ __( 'No Users Found', 'temporary-access' ) }</p> }
         </>
     );
 }
 
 UsersList = withDispatch( (dispatch) => {
+    dispatch(name).getUsers();
+
     return {
-        users: dispatch(name).getUsers()
+        onEdit: ( userId ) => {
+            const Users = wp.data.select(name).getUsers();
+            const UserIndex = findIndex( Users, ( c_user ) => c_user.ID === userId );
+
+            if ( -1 < UserIndex ) {
+                SetCurrentUserForEdit( Users[ UserIndex ] );
+            }
+        },
+        onDelete: ( userId ) => {
+            console.log(userId);
+        }
     };
 })(UsersList);
 
-UsersList = withSelect( (select) => {
+UsersList = withSelect( ( select ) => {
     return {
         usersList: select(name).getUsers()
     };

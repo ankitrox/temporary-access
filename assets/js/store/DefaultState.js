@@ -7,8 +7,8 @@ const DefaultState = {
         last_name: null,
         role: '',
         redirect: '',
-        start_time: null,
-        end_time: null,
+        start_date: null,
+        end_date: null,
     },
     notifier: {
         type: '',

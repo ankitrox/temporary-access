@@ -1,4 +1,5 @@
 import name from "../store/name";
+import {SaveField} from "../../utils";
 
 const {
     TextControl,
@@ -11,7 +12,7 @@ const {
 const { roles } = tempAccess;
 const { map } = window.lodash;
 const { __ } = wp.i18n;
-const { withDispatch, withSelect } = wp.data;
+const { withDispatch, withSelect, dispatch } = wp.data;
 
 const getRoles = () => {
     return map( roles, ( value, key ) => {
@@ -23,7 +24,7 @@ const getRoles = () => {
 };
 
 let EditForm = ( props ) => {
-    const { saveField, setContext, currentData, processing } = props;
+    const { setContext, currentData, processing } = props;
     const {
         user_email,
         first_name,
@@ -39,19 +40,19 @@ let EditForm = ( props ) => {
         <div className={"tempaccess_editform"}>
             <BaseControl>
                 <TextControl
-                    label={ __( 'Enter Email', 'temporary-access' ) }
+                    label={ __( 'Enter Email (Required)', 'temporary-access' ) }
                     type={ 'email' }
                     value={ user_email }
-                    onChange={ (val) => saveField( 'email', val ) }
+                    onChange={ (val) => SaveField( 'user_email', val ) }
                 />
             </BaseControl>
 
             <BaseControl>
                 <TextControl
-                    label={ __( 'Username', 'temporary-access' ) }
+                    label={ __( 'Username (Required)', 'temporary-access' ) }
                     type={ 'text' }
                     value={ user_login }
-                    onChange={ (val) => saveField( 'user_login', val ) }
+                    onChange={ (val) => SaveField( 'user_login', val ) }
                 />
             </BaseControl>
 
@@ -60,7 +61,7 @@ let EditForm = ( props ) => {
                     label={ __( 'Enter First Name', 'temporary-access' ) }
                     type={ 'text' }
                     value={ first_name }
-                    onChange={ (val) => saveField( 'first_name', val ) }
+                    onChange={ (val) => SaveField( 'first_name', val ) }
                 />
             </BaseControl>
 
@@ -69,7 +70,7 @@ let EditForm = ( props ) => {
                     label={ __( 'Enter Last Name', 'temporary-access' ) }
                     type={ 'text' }
                     value={ last_name }
-                    onChange={ (val) => saveField( 'last_name', val ) }
+                    onChange={ (val) => SaveField( 'last_name', val ) }
                 />
             </BaseControl>
 
@@ -78,16 +79,16 @@ let EditForm = ( props ) => {
                     label={ __( 'Select role', 'temporary-access' ) }
                     value={ role }
                     options={ getRoles() }
-                    onChange={ ( role ) => saveField( 'role', role ) }
+                    onChange={ ( role ) => SaveField( 'role', role ) }
                 />
             </BaseControl>
 
             <BaseControl>
                 <TextControl
-                    label={ __( 'Start Date and Time (Optional)', 'temporary-access' ) }
+                    label={ __( 'Start Date and Time', 'temporary-access' ) }
                     type={ 'datetime-local' }
                     value={ start_date }
-                    onChange={ (val) => saveField( 'start_date', val ) }
+                    onChange={ (val) => SaveField( 'start_date', val ) }
                 />
             </BaseControl>
 
@@ -96,7 +97,7 @@ let EditForm = ( props ) => {
                     label={ __( 'End Date and Time (Required)', 'temporary-access' ) }
                     type={ 'datetime-local' }
                     value={ end_date }
-                    onChange={ (val) => saveField( 'start_date', val ) }
+                    onChange={ (val) => SaveField( 'end_date', val ) }
                 />
             </BaseControl>
 
@@ -105,7 +106,7 @@ let EditForm = ( props ) => {
                     label={ __( 'Post login redirect URL', 'temporary-access' ) }
                     type={ 'url' }
                     value={ redirect }
-                    onChange={ (val) => saveField( 'redirect', val ) }
+                    onChange={ (val) => SaveField( 'redirect', val ) }
                 />
             </BaseControl>
 
@@ -118,7 +119,10 @@ let EditForm = ( props ) => {
 
                 <Button
                     text={ __( 'Close', 'temporary-access' ) }
-                    onClick={ () => setContext('view') }
+                    onClick={ () => {
+                        dispatch(name).reset();
+                        setContext('view')
+                    }}
                     isSecondary
                 />
 
@@ -139,9 +143,6 @@ EditForm = withSelect((select) => {
 
 EditForm = withDispatch( ( dispatch ) => {
     return {
-        saveField: ( field, val ) => {
-            dispatch(name).setField( field, val )
-        },
         setContext: ( context = 'view' ) => {
             dispatch(name).setContext( context )
         }

@@ -18,7 +18,7 @@ let AddNewUser = ( props ) => {
     );
 };
 
-AddNewUser = withDispatch((dispatch, ownProps) => {
+AddNewUser = withDispatch((dispatch) => {
     return {
         onclick: () => {
             dispatch(name).setContext('edit');

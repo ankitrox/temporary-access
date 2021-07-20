@@ -51,8 +51,8 @@ class APIUser {
 		$user_obj->last_name  = $user->last_name;
 		$user_obj->user_email = $user->data->user_email;
 		$user_obj->user_login = $user->data->user_login;
-		$user_obj->start_date = $user->start_date ? date( 'YYYY-MM-DDThh:mm', $user->start_date ) : null;
-		$user_obj->end_date   = $user->end_date ? date( 'YYYY-MM-DDThh:mm', $user->end_date ) : null;
+		$user_obj->start_date = $user->{UserManagement::START_DATE_KEY} ? date( 'Y-m-d\TH:i:s', (int) $user->{UserManagement::START_DATE_KEY} ) : null;
+		$user_obj->end_date   = $user->{UserManagement::EXPIRATION_KEY} ? date( 'Y-m-d\TH:i:s', (int) $user->{UserManagement::EXPIRATION_KEY} ) : null;
 		$user_obj->redirect   = $user->temp_redirect ?? null;
 		$user_obj->role       = $user->roles[0];
 		$user_obj->token      = get_user_meta( $this->user_id, $user_manager::TOKEN_KEY, true );

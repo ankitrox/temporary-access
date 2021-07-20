@@ -19,6 +19,8 @@ use WP_User;
  */
 interface UserManagement {
 
+	const START_DATE_KEY = 'tempaccess_start';
+
 	/**
 	 * Expiration meta key.
 	 */

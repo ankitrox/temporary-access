@@ -50,7 +50,7 @@ class UserManager implements UserManagement {
 			$args = wp_parse_args(
 				$args,
 				[
-					'email'      => null,
+					'user_email' => null,
 					'first_name' => '',
 					'last_name'  => '',
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
@@ -102,14 +102,15 @@ class UserManager implements UserManagement {
 		$return_users = [];
 		$page         = $args['page'] ?? 1;
 		$number       = apply_filters( 'tempaccess.read_users', 10 );
-		$users_args = [
+		$users_args   = [
 			'meta_query' => [
 				[
-					'key'     => self::EXPIRATION_KEY,
-					'type'    => 'NUMERIC',
+					'key'  => self::EXPIRATION_KEY,
+					'type' => 'NUMERIC',
 				]
 			],
 		];
+
 		$users_args['number'] = $number;
 		$users_args['paged']  = $page;
 
@@ -137,7 +138,7 @@ class UserManager implements UserManagement {
 	 * Update an existing temporary user.
 	 *
 	 * @param int|null $uid User ID.
-	 * @param array $args User args.
+	 * @param array    $args User args.
 	 *
 	 * @return \stdClass
 	 * @throws Throwable Exception for user update.
@@ -243,28 +244,35 @@ class UserManager implements UserManagement {
 	 * Associate meta information to newly created temporary user.
 	 *
 	 * @param WP_User $user User object.
-	 * @param array $args User arguments.
+	 * @param array   $args User arguments.
 	 *
 	 * @return void
 	 */
 	public function associate_meta( WP_User $user, array $args ): void {
-		$expiration_time = $args['expire'] ?? '+1 day';
-		$expiration_time = strtotime( $expiration_time );
-
-		/**
-		 * Expire would get updated only during
-		 */
-		if ( ! empty( $args['expire'] ) || 'tempaccess.user_updated' !== current_action() ) {
-			update_user_meta( $user->ID, self::EXPIRATION_KEY, $expiration_time );
-		}
-
 		/**
 		 * Token would only be generated during user creation.
 		 */
 		if ( 'tempaccess.user_created' === current_action() ) {
-			$token = $user->ID . time() . uniqid( '', true );
-			$token = md5( $token );
+			$start_date = strtotime( $args['start_date'] ) ?? strtotime( 'now' );
+			$end_date   = strtotime( $args['end_date'] ) ?? strtotime( '+1 day' );
+			$token      = $user->ID . time() . uniqid( '', true );
+			$token      = md5( $token );
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );
+			update_user_meta( $user->ID, self::START_DATE_KEY, $start_date );
+			update_user_meta( $user->ID, self::EXPIRATION_KEY, $end_date );
+		}
+
+		/**
+		 * Update start date and end date during user update only if present.
+		 */
+		if ( 'tempaccess.user_updated' === current_action() ) {
+			if ( ! empty( $args['start_date'] ) ) {
+				update_user_meta( $user->ID, self::START_DATE_KEY, strtotime( $args['start_date'] ) );
+			}
+
+			if ( ! empty( $args['end_date'] ) ) {
+				update_user_meta( $user->ID, self::EXPIRATION_KEY, strtotime( $args['end_date'] ) );
+			}
 		}
 	}
 
@@ -278,7 +286,7 @@ class UserManager implements UserManagement {
 	public function post_login_actions( WP_User $user ) {
 		update_user_meta( $user->ID, 'tempaccess_last_login', time() );
 
-		wp_redirect( admin_url() );
+		wp_safe_redirect( admin_url() );
 		die;
 	}
 }

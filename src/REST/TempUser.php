@@ -129,7 +129,7 @@ class TempUser {
 	/**
 	 * Retrieve users based on the requested criteria.
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_Error|WP_REST_Response
 	 */
@@ -151,7 +151,7 @@ class TempUser {
 	/**
 	 * Update temporary user's data
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Request object.
 	 *
 	 * @return WP_Error|WP_REST_Response
 	 */
@@ -172,7 +172,10 @@ class TempUser {
 	/**
 	 * Delete temporary user's account.
 	 *
-	 * @param WP_REST_Request $request
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response|WP_Error
+	 * @throws \Exception   Unable to delete.
 	 */
 	public function delete_user( WP_REST_Request $request ) {
 		try {

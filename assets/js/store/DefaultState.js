@@ -1,14 +1,14 @@
 const DefaultState = {
     current: {
         ID: null,
-        user_email: null,
+        user_email: '',
         user_login: '',
-        first_name: null,
-        last_name: null,
+        first_name: '',
+        last_name: '',
         role: '',
         redirect: '',
-        start_date: null,
-        end_date: null,
+        start_date: '',
+        end_date: '',
     },
     notifier: {
         type: '',

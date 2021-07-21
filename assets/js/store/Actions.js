@@ -47,14 +47,17 @@ const actions = {
     return actions.setUsers(users);
   },
 
-  createUser() {
-    return {
+  *createUser() {
+    const user = yield {
       type: "CREATE_USER",
     };
   },
 
-  *generateUser() {
-    const user = yield actions.createUser();
+  *deleteUser( userId ) {
+    yield {
+      type: "DELETE_USER",
+      userId
+    };
   },
 
   setContext(context = "view") {

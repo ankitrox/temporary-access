@@ -52,7 +52,6 @@ let EditForm = (props) => {
     setContext,
     currentData,
     processing,
-    notification,
     createUser,
   } = props;
   const {
@@ -67,22 +66,10 @@ let EditForm = (props) => {
     user_login,
   } = currentData;
 
-  const { type, message } = notification;
   const ButtonLabel = !ID ? __("Create", "temporary-access") : __("Update", "temporary-access");
 
   return (
     <div className={"tempaccess_editform"}>
-      {!isEmpty(message) &&
-        <Notice
-            status={type}
-            onRemove={ () => {
-                dispatch(name).setNotifier({ type: '', message:'' });
-            }}
-        >
-            {message}
-        </Notice>
-      }
-
       <BaseControl>
         <TextControl
           label={__("Email (Required)", "temporary-access")}
@@ -181,7 +168,6 @@ EditForm = withSelect((select) => {
   return {
     currentData: select(name).getCurrentEditData(),
     processing: select(name).isProcessing(),
-    notification: select(name).getNotifier(),
   };
 })(EditForm);
 
@@ -191,7 +177,7 @@ EditForm = withDispatch((dispatch) => {
       dispatch(name).setContext(context);
     },
     createUser: () => {
-      dispatch(name).generateUser();
+      dispatch(name).createUser();
     },
   };
 })(EditForm);

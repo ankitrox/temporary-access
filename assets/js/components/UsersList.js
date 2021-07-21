@@ -1,7 +1,7 @@
 import name from '../store/name';
 import { SetCurrentUserForEdit } from "../../utils";
 
-const { withDispatch, withSelect } = wp.data;
+const { withDispatch, withSelect, dispatch, select } = wp.data;
 const { map, isEmpty, findIndex } = window.lodash;
 const { sprintf, __ } = wp.i18n;
 const { Dashicon } = wp.components;
@@ -51,9 +51,15 @@ let UsersList = ( props ) => {
             { usersList.length > 0 && (
              <div className={'userslist_wrapper'}>
                  <div className={ 'temp__user_data temp__user_data_headings' }>
-                     { map( Headings, (heading) => <div className={ 'temp_user_data_item temp_user_item_heading' }>{ sprintf( __( '%s', 'temporary-access' ), heading ) }</div> ) }
+                     { map( Headings, (heading) => <div key={heading} className={ 'temp_user_data_item temp_user_item_heading' }>{ sprintf( __( '%s', 'temporary-access' ), heading ) }</div> ) }
                  </div>
-                 { map( usersList, ( user ) => <UserData user={user} {...props} /> ) }
+                 { map( usersList, ( user ) => {
+                     const { ID } = user;
+                     return (
+                         <UserData key={ID} user={user} {...props} />
+                     );
+                 })
+                 }
              </div>
             )}
 
@@ -67,7 +73,7 @@ UsersList = withDispatch( (dispatch) => {
 
     return {
         onEdit: ( userId ) => {
-            const Users = wp.data.select(name).getUsers();
+            const Users = select(name).getUsers();
             const UserIndex = findIndex( Users, ( c_user ) => c_user.ID === userId );
 
             if ( -1 < UserIndex ) {
@@ -75,7 +81,7 @@ UsersList = withDispatch( (dispatch) => {
             }
         },
         onDelete: ( userId ) => {
-            console.log(userId);
+            dispatch(name).deleteUser( userId );
         }
     };
 })(UsersList);

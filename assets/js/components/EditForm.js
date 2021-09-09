@@ -55,7 +55,7 @@ let EditForm = (props) => {
     createUser,
   } = props;
   const {
-      ID,
+    ID,
     user_email,
     first_name,
     last_name,

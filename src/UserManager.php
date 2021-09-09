@@ -93,14 +93,16 @@ class UserManager implements UserManagement {
 	/**
 	 * Retrieve users.
 	 *
-	 * @param int|null $uid
-	 * @param array $args
+	 * @param int|null $uid User ID.
+	 * @param array    $args List of arguments for fetching users.
 	 *
 	 * @return WP_User|array
 	 */
 	public function read( int $uid = null, array $args = [] ) {
 		$return_users = [];
 		$page         = $args['page'] ?? 1;
+		$orderby      = $args['orderby'] ?? 'user_registered';
+		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
 		$number       = apply_filters( 'tempaccess.read_users', 10 );
 		$users_args   = [
 			'meta_query' => [
@@ -111,8 +113,10 @@ class UserManager implements UserManagement {
 			],
 		];
 
-		$users_args['number'] = $number;
-		$users_args['paged']  = $page;
+		$users_args['number']  = $number;
+		$users_args['paged']   = $page;
+		$users_args['orderby'] = $orderby;
+		$users_args['order']   = $order;
 
 		if ( $uid ) {
 			$users_args['include'] = [ $uid ];

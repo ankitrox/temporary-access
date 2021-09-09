@@ -47,6 +47,8 @@ const controls = {
 
           if ( ! ID ) {
               dispatch(name).reset();
+
+              return user;
           }
 
           each( user, (val, key) => {

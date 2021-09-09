@@ -18,7 +18,8 @@ const UserData = ( { user, onEdit, onDelete } ) => {
     return (
         <>
             <div className={ 'temp__user_data' }>
-                <div className={ 'temp_user_data_item' }>{ isEmpty( first_name ) && isEmpty( last_name ) ? user_email : sprintf( '%1s %2s (%3s)', first_name, last_name, user_email ) }</div>
+                <div className={ 'temp_user_data_item' }>{ isEmpty( first_name ) && isEmpty( last_name ) ? '—' : sprintf( '%1s %2s', first_name, last_name ) }</div>
+                <div className={ 'temp_user_data_item' }>{ user_email }</div>
                 <div className={ 'temp_user_data_item' }>{ user_login }</div>
                 <div className={ 'temp_user_data_item' }>
                     <Dashicon
@@ -41,6 +42,7 @@ let UsersList = ( props ) => {
     const { usersList } = props;
     const Headings = [
         __( 'Name', 'temporary-access' ),
+        __( 'Email', 'temporary-access' ),
         __( 'Username', 'temporary-access' ),
         __( 'Edit', 'temporary-access' ),
         __( 'Delete', 'temporary-access' ),
@@ -68,7 +70,7 @@ let UsersList = ( props ) => {
     );
 }
 
-UsersList = withDispatch( (dispatch) => {
+UsersList = withDispatch( ( dispatch ) => {
     dispatch(name).getUsers();
 
     return {

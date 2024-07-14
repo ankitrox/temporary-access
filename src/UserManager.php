@@ -166,7 +166,9 @@ class UserManager implements UserManagement {
 			);
 
 			$user_modal = new User( $args, 'update' );
-			$user       = wp_update_user( get_object_vars( $user_modal ) );
+			$user_modal = get_object_vars( $user_modal );
+			unset( $user_modal['setters'] );
+			$user       = wp_update_user( $user_modal );
 
 			if ( is_wp_error( $user ) ) {
 				throw new \Exception( $user->get_error_message() );

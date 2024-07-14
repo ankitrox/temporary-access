@@ -46,6 +46,7 @@ class Settings {
 			'wp-temp-access',
 			trailingslashit( plugin()->url ) . 'assets/build/index.js',
 			[
+				'lodash',
 				'wp-api-fetch',
 				'wp-components',
 				'wp-compose',
@@ -54,7 +55,6 @@ class Settings {
 				'wp-dom-ready',
 				'wp-element',
 				'wp-notices',
-
 			],
 			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.js', ),
 			true

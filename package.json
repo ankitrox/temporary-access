@@ -1,0 +1,20 @@
+{
+  "name": "temporary-access",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "wp-scripts build assets/js/index.js --output-path=assets/build/",
+    "start": "wp-scripts start assets/js/index.js --output-path=assets/build/",
+    "lint:js": "wp-scripts lint-js assets/js/",
+    "lint:js-fix": "prettier --write --config .prettierrc.js --ignore-path .prettierignore \"**/*.{js,jsx,ts,tsx,.yml,.yaml}\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@wordpress/eslint-plugin": "^20.0.0",
+    "@wordpress/prettier-config": "^4.3.0",
+    "@wordpress/scripts": "^27.0.0"
+  }
+}

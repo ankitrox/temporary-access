@@ -3,7 +3,7 @@
  * Helper class.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ namespace Ankit\TemporaryAccess\Utils;
  * @package Ankit\TemporaryAccess\Utils
  */
 class Helper {
+
 
 	/**
 	 * This method is an improved version of PHP's filter_input() and
@@ -79,60 +80,58 @@ class Helper {
 		 * is running on Cli.
 		 */
 
-		// @codingStandardsIgnoreStart
+     // @codingStandardsIgnoreStart
 
-		switch ( $type ) {
+     switch ( $type ) {
 
 			case INPUT_GET:
 				if ( ! isset( $_GET[ $variable_name ] ) ) {
-					return null;
-				}
+                  return null;
+				   }
 
 				$input = wp_kses( $_GET[ $variable_name ], $allowed_html_tags );
 				break;
 
 			case INPUT_POST:
 				if ( ! isset( $_POST[ $variable_name ] ) ) {
-					return null;
-				}
+                    return null;
+				   }
 
 				$input = wp_kses( $_POST[ $variable_name ], $allowed_html_tags );
 				break;
 
 			case INPUT_COOKIE:
 				if ( ! isset( $_COOKIE[ $variable_name ] ) ) {
-					return null;
-				}
+                      return null;
+				   }
 
 				$input = wp_kses( $_COOKIE[ $variable_name ], $allowed_html_tags );
 				break;
 
 			case INPUT_SERVER:
 				if ( ! isset( $_SERVER[ $variable_name ] ) ) {
-					return null;
-				}
+                return null;
+				   }
 
 				$input = wp_kses( $_SERVER[ $variable_name ], $allowed_html_tags );
 				break;
 
 			case INPUT_ENV:
 				if ( ! isset( $_ENV[ $variable_name ] ) ) {
-					return null;
-				}
+                return null;
+				   }
 
 				$input = wp_kses( $_ENV[ $variable_name ], $allowed_html_tags );
 				break;
 
 			default:
 				return null;
-				break;
+			 break;
 
 		}
 
-		// @codingStandardsIgnoreEnd
+     // @codingStandardsIgnoreEnd
 
 		return filter_var( $input, $filter );
-
 	}
-
 }

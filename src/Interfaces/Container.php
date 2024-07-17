@@ -3,7 +3,7 @@
  * Container Interface.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -16,6 +16,7 @@ namespace Ankit\TemporaryAccess\Interfaces;
  * @package WpGuruDev\OrderExport\Interfaces
  */
 interface Container {
+
 
 	/**
 	 * Retrieve the service from container.

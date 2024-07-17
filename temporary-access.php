@@ -22,10 +22,10 @@ use Pimple\Container as PimpleContainer;
 // Prevent direct access.
 defined( 'ABSPATH' ) || exit;
 
-$hooks = [
+$hooks = array(
 	'admin_notices',
 	'network_admin_notices',
-];
+);
 
 /**
  * PHP 7.3+ is required in order to use the plugin.
@@ -46,7 +46,7 @@ if ( version_compare( PHP_VERSION, '7.3', '<' ) ) {
 						'The plugin Temporary Access has been deactivated',
 						'temporary-access'
 					),
-					wp_kses( $message, [ 'br' => true ] )
+					wp_kses( $message, array( 'br' => true ) )
 				);
 
 				deactivate_plugins( plugin_basename( __FILE__ ) );
@@ -124,7 +124,7 @@ function plugin(): Plugin {
  */
 add_action(
 	'plugins_loaded',
-	function() {
+	function () {
 		plugin()->run();
 	},
 	100

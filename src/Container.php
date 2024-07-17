@@ -3,7 +3,7 @@
  * Service container for the plugin.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -20,9 +20,10 @@ use Ankit\TemporaryAccess\REST\TempUser;
  * Class Container
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 class Container implements ContainerInterface {
+
 
 	/**
 	 * Pimple container.
@@ -50,7 +51,7 @@ class Container implements ContainerInterface {
 	 * @throws InvalidArgumentException Exception for invalid service.
 	 */
 	public function get( string $service ) {
-		if ( ! in_array( $service, $this->container->keys() ) ) {
+		if ( ! in_array( $service, $this->container->keys(), true ) ) {
 			/* translators: %$s is replaced with requested service name. */
 			throw new InvalidArgumentException( sprintf( __( 'Invalid Service %s Passed to the container', 'temporary-access' ), $service ) );
 		}
@@ -73,11 +74,9 @@ class Container implements ContainerInterface {
 		/**
 		 * User management service.
 		 *
-		 * @param PimpleContainer $c
-		 *
 		 * @return UserManager
 		 */
-		$this->container['user_manager'] = function( PimpleContainer $c ) {
+		$this->container['user_manager'] = function () {
 			return new UserManager();
 		};
 
@@ -88,7 +87,7 @@ class Container implements ContainerInterface {
 		 *
 		 * @return Authenticator
 		 */
-		$this->container['authenticator'] = function( PimpleContainer $c ) {
+		$this->container['authenticator'] = function ( PimpleContainer $c ) {
 			return new Authenticator( $c['user_manager'] );
 		};
 
@@ -99,20 +98,17 @@ class Container implements ContainerInterface {
 		 *
 		 * @return TempUser
 		 */
-		$this->container['temp_user_endpoint'] = function( PimpleContainer $c ) {
+		$this->container['temp_user_endpoint'] = function ( PimpleContainer $c ) {
 			return new TempUser( $c['user_manager'] );
 		};
 
 		/**
 		 * Settings service.
 		 *
-		 * @param PimpleContainer $c Pimple container object.
-		 *
 		 * @return Settings
 		 */
-		$this->container['settings'] = function( PimpleContainer $c ) {
+		$this->container['settings'] = function () {
 			return new Settings();
 		};
-
 	}
 }

@@ -3,7 +3,7 @@
  * Endpoint to manage temporary user.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -24,6 +24,7 @@ use Exception;
  * @package Ankit\TemporaryAccess\REST
  */
 class TempUser {
+
 
 	/**
 	 * Endpoint namespace.
@@ -67,39 +68,39 @@ class TempUser {
 		register_rest_route(
 			self::NAMESPACE,
 			'/users',
-			[
-				[
+			array(
+				array(
 					'methods'  => WP_REST_Server::READABLE,
-					'callback' => [ $this, 'get_users' ],
-				],
-				[
+					'callback' => array( $this, 'get_users' ),
+				),
+				array(
 					'methods'  => WP_REST_Server::CREATABLE,
-					'callback' => [ $this, 'create_user' ],
-				],
-				'permission_callback' => [ $this, 'permission_check' ],
-				'args'                => [],
-			]
+					'callback' => array( $this, 'create_user' ),
+				),
+				'permission_callback' => array( $this, 'permission_check' ),
+				'args'                => array(),
+			)
 		);
 
 		register_rest_route(
 			self::NAMESPACE,
 			'/users/(?P<ID>\d+)',
-			[
-				[
+			array(
+				array(
 					'methods'  => WP_REST_Server::READABLE,
-					'callback' => [ $this, 'get_users' ],
-				],
-				[
+					'callback' => array( $this, 'get_users' ),
+				),
+				array(
 					'methods'  => WP_REST_Server::EDITABLE,
-					'callback' => [ $this, 'update_user' ],
-				],
-				[
+					'callback' => array( $this, 'update_user' ),
+				),
+				array(
 					'methods'  => WP_REST_Server::DELETABLE,
-					'callback' => [ $this, 'delete_user' ],
-				],
-				'permission_callback' => [ $this, 'permission_check' ],
-				'args'                => [],
-			]
+					'callback' => array( $this, 'delete_user' ),
+				),
+				'permission_callback' => array( $this, 'permission_check' ),
+				'args'                => array(),
+			)
 		);
 	}
 
@@ -185,7 +186,7 @@ class TempUser {
 				return new WP_REST_Response( __( 'User has been deleted successfully', 'temporary-access' ) );
 			}
 
-			throw new Exception( __( 'Could not delete the user. Please try again.', 'temporray-access' ) );
+			throw new Exception( __( 'Could not delete the user. Please try again.', 'temporary-access' ) );
 
 		} catch ( Throwable $e ) {
 

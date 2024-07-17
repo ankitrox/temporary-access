@@ -1,0 +1,26 @@
+{
+	"search.exclude": {
+		"dist/": true,
+		"node_modules/": true,
+		"vendor/": true
+	},
+	"files.exclude": {
+		"dist/": true,
+		"node_modules/": true,
+		"third-party/": true,
+		"vendor/": true
+	},
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[javascript]": {
+		"editor.formatOnSave": true
+	},
+	"[scss]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "stylelint.vscode-stylelint"
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "explicit",
+		"source.fixAll.eslint": "explicit"
+	},
+	"stylelint.validate": [ "css", "scss" ]
+}

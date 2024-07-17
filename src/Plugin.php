@@ -3,7 +3,7 @@
  * Main plugin file.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -18,9 +18,10 @@ use Ankit\TemporaryAccess\REST\TempUser;
  * Class Plugin
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 class Plugin {
+
 	/**
 	 * Plugin version.
 	 *
@@ -83,8 +84,8 @@ class Plugin {
 	 * @param ContainerInterface $container Container instance.
 	 */
 	public function __construct( ContainerInterface $container ) {
-		$this->path       = dirname( __FILE__, 2 );
-		$this->url        = plugin_dir_url( trailingslashit( dirname( __FILE__, 2 ) ) . 'temporary-access.php' );
+		$this->path       = dirname( __DIR__, 1 );
+		$this->url        = plugin_dir_url( trailingslashit( dirname( __DIR__, 1 ) ) . 'temporary-access.php' );
 		$this->assets_dir = trailingslashit( $this->path ) . 'assets/';
 
 		$this->container = $container;
@@ -108,10 +109,10 @@ class Plugin {
 		$this->authenticator->init();
 		$settings->init();
 
-		add_action( 'init', [ $this->user_manager, 'init' ] );
-		add_action( 'rest_api_init', [ $this->user_endpoint, 'register' ] );
-		add_action( 'tempaccess.user_authenticated', [ $this->user_manager, 'post_login_actions' ] );
-		add_action( 'init', [ $this, 'load_translations' ] );
+		add_action( 'init', array( $this->user_manager, 'init' ) );
+		add_action( 'rest_api_init', array( $this->user_endpoint, 'register' ) );
+		add_action( 'tempaccess.user_authenticated', array( $this->user_manager, 'post_login_actions' ) );
+		add_action( 'init', array( $this, 'load_translations' ) );
 	}
 
 	/**

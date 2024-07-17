@@ -3,7 +3,7 @@
  * User management class.
  *
  * @package Ankit\TemporrayAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -25,6 +25,7 @@ use WP_User;
  */
 class UserManager implements UserManagement {
 
+
 	/**
 	 * Initialization setup.
 	 *
@@ -33,8 +34,8 @@ class UserManager implements UserManagement {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'tempaccess.user_created', [ $this, 'associate_meta' ], 10, 2 );
-		add_action( 'tempaccess.user_updated', [ $this, 'associate_meta' ], 10, 2 );
+		add_action( 'tempaccess.user_created', array( $this, 'associate_meta' ), 10, 2 );
+		add_action( 'tempaccess.user_updated', array( $this, 'associate_meta' ), 10, 2 );
 	}
 
 	/**
@@ -43,30 +44,31 @@ class UserManager implements UserManagement {
 	 * @param array $args User arguments.
 	 *
 	 * @return WP_User
-	 * @throws \Exception|\Throwable for WP Errors.
+	 * @throws Exception Exception for user creation.
+	 * @throws Throwable WP Errors.
 	 */
 	public function create( array $args ): WP_User {
 		try {
 			$args = wp_parse_args(
 				$args,
-				[
+				array(
 					'user_email' => null,
 					'first_name' => '',
 					'last_name'  => '',
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
 					'user_pass'  => wp_generate_password( 16 ),
 					'user_login' => 'user_' . time(),
-					'start_date' => strtotime('now'),
+					'start_date' => strtotime( 'now' ),
 					'end_date'   => strtotime( '+1 day' ),
 					'redirect'   => admin_url(),
-				]
+				)
 			);
 
 			$user_modal = new User( $args );
 			$user       = wp_insert_user( get_object_vars( $user_modal ) );
 
 			if ( is_wp_error( $user ) ) {
-				throw new \Exception( $user->get_error_message() );
+					throw new Exception( $user->get_error_message() );
 			}
 
 			$user = get_user_by( 'id', $user );
@@ -82,7 +84,7 @@ class UserManager implements UserManagement {
 
 			return $user;
 
-		} catch ( \Throwable $e ) {
+		} catch ( Throwable $e ) {
 
 			do_action( 'tempaccess.exception', $e );
 
@@ -93,25 +95,25 @@ class UserManager implements UserManagement {
 	/**
 	 * Retrieve users.
 	 *
-	 * @param int|null $uid User ID.
+	 * @param int|null $uid  User ID.
 	 * @param array    $args List of arguments for fetching users.
 	 *
 	 * @return WP_User|array
 	 */
-	public function read( int $uid = null, array $args = [] ) {
-		$return_users = [];
+	public function read( int $uid = null, array $args = array() ) {
+		$return_users = array();
 		$page         = $args['page'] ?? 1;
 		$orderby      = $args['orderby'] ?? 'user_registered';
 		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
 		$number       = apply_filters( 'tempaccess.read_users', 10 );
-		$users_args   = [
-			'meta_query' => [
-				[
+		$users_args   = array(
+			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				array(
 					'key'  => self::EXPIRATION_KEY,
 					'type' => 'NUMERIC',
-				]
-			],
-		];
+				),
+			),
+		);
 
 		$users_args['number']  = $number;
 		$users_args['paged']   = $page;
@@ -119,15 +121,14 @@ class UserManager implements UserManagement {
 		$users_args['order']   = $order;
 
 		if ( $uid ) {
-			$users_args['include'] = [ $uid ];
+			$users_args['include'] = array( $uid );
 		}
 
 		$users = get_users( $users_args );
 
-
-		if ( ! empty ( $users ) ) {
+		if ( ! empty( $users ) ) {
 			foreach ( $users as $user ) {
-				$return_users[] = (new APIUser( $user->ID ))->get_modal();
+				$return_users[] = ( new APIUser( $user->ID ) )->get_modal();
 			}
 		}
 
@@ -141,13 +142,15 @@ class UserManager implements UserManagement {
 	/**
 	 * Update an existing temporary user.
 	 *
-	 * @param int|null $uid User ID.
+	 * @param int|null $uid  User ID.
 	 * @param array    $args User args.
 	 *
 	 * @return \stdClass
+	 * @throws Exception Exception for user update.
 	 * @throws Throwable Exception for user update.
+	 * @throws InvalidArgumentException Error for no user ID.
 	 */
-	public function update( int $uid = null, array $args = [] ): \stdClass {
+	public function update( int $uid = null, array $args = array() ): \stdClass {
 		if ( ! $uid ) {
 			throw new InvalidArgumentException( __( 'User ID is required for update', 'temporary-access' ) );
 		}
@@ -155,21 +158,23 @@ class UserManager implements UserManagement {
 		try {
 			$args = wp_parse_args(
 				$args,
-				[
+				array(
 					'ID'         => $uid,
 					'user_email' => null,
 					'first_name' => '',
 					'last_name'  => '',
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
 					'user_login' => 'user_' . time(),
-				]
+				)
 			);
 
 			$user_modal = new User( $args, 'update' );
-			$user       = wp_update_user( get_object_vars( $user_modal ) );
+			$user_modal = get_object_vars( $user_modal );
+			unset( $user_modal['setters'] );
+			$user = wp_update_user( $user_modal );
 
 			if ( is_wp_error( $user ) ) {
-				throw new \Exception( $user->get_error_message() );
+				throw new Exception( $user->get_error_message() );
 			}
 
 			$user = get_user_by( 'id', $user );
@@ -183,33 +188,34 @@ class UserManager implements UserManagement {
 			 */
 			do_action( 'tempaccess.user_updated', $user, $args );
 
-			return (new APIUser( $user->ID ))->get_modal();
+			return ( new APIUser( $user->ID ) )->get_modal();
 
-		} catch ( \Throwable $e ) {
+		} catch ( Throwable $e ) {
 
 			do_action( 'tempaccess.exception', $e );
 
 			throw $e;
 		}
-
 	}
 
 	/**
 	 * Remove the user from system.
 	 *
-	 * @param int|null $uid
+	 * @param int|null $user_id User ID.
 	 *
+	 * @throws InvalidArgumentException Error for no user ID.
+	 * @throws Exception Error for user deletion.
 	 * @return bool
 	 */
-	public function delete( int $uid = null ): bool {
-		if ( ! $uid ) {
+	public function delete( int $user_id = null ): bool {
+		if ( ! $user_id ) {
 			throw new InvalidArgumentException( __( 'User ID is required for deletion', 'temporary-access' ) );
 		}
 
-		$user = get_user_by( 'id', $uid );
+		$user = get_user_by( 'id', $user_id );
 
 		if ( ! $user ) {
-			throw new Exception( __( 'This user does not exist', 'temporray-access' ) );
+			throw new Exception( __( 'This user does not exist', 'temporary-access' ) );
 		}
 
 		if ( ! function_exists( 'wp_delete_user' ) ) {
@@ -227,16 +233,20 @@ class UserManager implements UserManagement {
 	 * @return int
 	 */
 	public function get_user_by_token( string $token ): int {
-		$user_args = [
-			'meta_key'   => UserManagement::TOKEN_KEY,
-			'meta_value' => $token,
-		];
+		$user_args = array(
+			'meta_key'   => UserManagement::TOKEN_KEY, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_value' => $token, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+		);
 
-		$user = get_users( $user_args );
+		$users = get_users( $user_args );
 
-		if ( ! empty ( $user ) ) {
-			/** @var WP_User $user */
-			$user = array_pop( $user );
+		if ( ! empty( $users ) ) {
+			/**
+			 * WP_User instance.
+			 *
+			 * @var WP_User $user
+			 */
+			$user = array_pop( $users );
 
 			return $user->ID;
 		}
@@ -253,9 +263,7 @@ class UserManager implements UserManagement {
 	 * @return void
 	 */
 	public function associate_meta( WP_User $user, array $args ): void {
-		/**
-		 * Token would only be generated during user creation.
-		 */
+		// Token would only be generated during user creation.
 		if ( 'tempaccess.user_created' === current_action() ) {
 			$start_date = strtotime( $args['start_date'] ) ?? strtotime( 'now' );
 			$end_date   = strtotime( $args['end_date'] ) ?? strtotime( '+1 day' );
@@ -266,9 +274,7 @@ class UserManager implements UserManagement {
 			update_user_meta( $user->ID, self::EXPIRATION_KEY, $end_date );
 		}
 
-		/**
-		 * Update start date and end date during user update only if present.
-		 */
+		// Update start date and end date during user update only if present.
 		if ( 'tempaccess.user_updated' === current_action() ) {
 			if ( ! empty( $args['start_date'] ) ) {
 				update_user_meta( $user->ID, self::START_DATE_KEY, strtotime( $args['start_date'] ) );

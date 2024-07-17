@@ -3,7 +3,7 @@
  * User Modal.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -19,12 +19,13 @@ use InvalidArgumentException;
  * @package Ankit\TemporaryAccess\Modal
  */
 class User {
+
 	/**
-	 * Setter attrs.
+	 * Setter attributes.
 	 *
 	 * @var string[]
 	 */
-	public $setters = [
+	public $setters = array(
 		'ID',
 		'user_email',
 		'first_name',
@@ -34,8 +35,13 @@ class User {
 		'start_date',
 		'end_date',
 		'redirect',
-	];
+	);
 
+	/**
+	 * Context for user object. This can be either create or update.
+	 *
+	 * @var string
+	 */
 	public static $context;
 
 	/**
@@ -44,14 +50,14 @@ class User {
 	 * @param array  $data    User data.
 	 * @param string $context Context in which object is being used. Create/Update.
 	 */
-	public function __construct( array $data = [], string $context = 'create' ) {
+	public function __construct( array $data = array(), string $context = 'create' ) {
 		self::$context = $context;
 
 		foreach ( $data as $k => $v ) {
 			if ( in_array( $k, $this->setters, true ) ) {
 				$this->{$k} = $v;
-				if ( method_exists( $this, 'validate_' . $k ) ){
-					call_user_func( [ $this, 'validate_' . $k ] );
+				if ( method_exists( $this, 'validate_' . $k ) ) {
+					call_user_func( array( $this, 'validate_' . $k ) );
 				}
 				continue;
 			}
@@ -62,12 +68,14 @@ class User {
 
 	/**
 	 * Validate email address.
+	 *
+	 * @throws InvalidArgumentException Exception for invalid email address.
 	 */
 	public function validate_user_email() {
 		/**
 		 * Email can be skipped during updation.
 		 */
-		if ( 'update' === self::$context && empty ( $this->user_email ) ) {
+		if ( 'update' === self::$context && empty( $this->user_email ) ) {
 			return;
 		}
 
@@ -91,14 +99,18 @@ class User {
 		if ( ! empty( $this->user_email ) && ! filter_var( $this->user_email, FILTER_VALIDATE_EMAIL ) ) {
 			throw new InvalidArgumentException( __( 'Invalid email address', 'temporary-access' ) );
 		}
-
 	}
 
+	/**
+	 * Validate the role of the user.
+	 *
+	 * @throws InvalidArgumentException Exception for invalid role.
+	 */
 	public function validate_role() {
 		/**
 		 * Email can be skipped during updation.
 		 */
-		if ( 'update' === self::$context && empty ( $this->role ) ) {
+		if ( 'update' === self::$context && empty( $this->role ) ) {
 			return;
 		}
 
@@ -110,8 +122,13 @@ class User {
 		}
 	}
 
+	/**
+	 * Validate the ID.
+	 *
+	 * @throws Exception Exception for invalid ID.
+	 */
 	public function validate_id() {
-		if ( ! empty ( $this->id ) ) {
+		if ( ! empty( $this->id ) ) {
 			$user = get_user_by( 'id', (int) $this->id );
 			if ( ! $user ) {
 				throw new Exception( __( 'Invalid ID specified for the user.', 'temporary-access' ) );

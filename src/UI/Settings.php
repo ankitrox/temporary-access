@@ -5,7 +5,8 @@
  * Registers a submenu page under users menu to manage temporary users.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
+ * @version 1.0.0
  */
 
 declare(strict_types=1);
@@ -22,30 +23,32 @@ use function Ankit\TemporaryAccess\plugin;
  */
 class Settings {
 
-	/**
-	 * Initialization actions.
-     *
-     * @return void
-	 */
-    public function init(): void {
-        add_action( 'admin_menu', [ $this, 'submenu' ] );
-        add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
-    }
 
 	/**
-     * Add scripts and styles to settings page.
-     *
+	 * Initialization actions.
+	 *
+	 * @return void
+	 */
+	public function init(): void {
+		add_action( 'admin_menu', array( $this, 'submenu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+	}
+
+	/**
+	 * Add scripts and styles to settings page.
+	 *
 	 * @param string $page_hook Page hook.
 	 */
 	public function scripts( string $page_hook ): void {
-        if ( 'users_page_wp-temporary-access' !== $page_hook ) {
-            return;
-        }
+		if ( 'users_page_wp-temporary-access' !== $page_hook ) {
+			return;
+		}
 
 		wp_register_script(
 			'wp-temp-access',
 			trailingslashit( plugin()->url ) . 'assets/build/index.js',
-			[
+			array(
+				'lodash',
 				'wp-api-fetch',
 				'wp-components',
 				'wp-compose',
@@ -54,23 +57,22 @@ class Settings {
 				'wp-dom-ready',
 				'wp-element',
 				'wp-notices',
-
-			],
+			),
 			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.js', ),
 			true
 		);
 
 		$blog_id = is_multisite() ? get_current_blog_id() : null;
 		$roles   = wp_list_pluck( wp_roles()->roles, 'name' );
-		$data    = [
+		$data    = array(
 			'path'  => get_rest_url( $blog_id, trailingslashit( TempUser::NAMESPACE ) . 'users' ),
 			'roles' => $roles,
-            'nonce' => wp_create_nonce( 'wp_rest' ),
-		];
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+		);
 
 		wp_add_inline_script(
 			'wp-temp-access',
-			'const tempAccess = ' . json_encode( $data ),
+			'const tempAccess = ' . wp_json_encode( $data ),
 			'before'
 		);
 
@@ -79,7 +81,7 @@ class Settings {
 		wp_enqueue_style(
 			'temp-access-css',
 			trailingslashit( plugin()->url ) . 'assets/build/index.css',
-            [],
+			array(),
 			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.css' ),
 		);
 	}
@@ -94,7 +96,7 @@ class Settings {
 			__( 'Temporary Access', 'temporary-access' ),
 			'edit_users',
 			'wp-temporary-access',
-            [ $this, 'output' ]
+			array( $this, 'output' )
 		);
 	}
 
@@ -102,13 +104,13 @@ class Settings {
 	 * Output the settings page markup.
 	 */
 	public function output() {
-	    ?>
-        <div id="temp-access-settings-page">
-            <div class="wrap">
-                <h1 class="wp-heading-inline"><?php echo esc_html( __( 'Temporary Access Settings', 'temporary-access' ) ); ?></h1>
-                <div id="temp-access-root"></div>
-            </div>
-        </div>
-        <?php
-    }
+		?>
+		<div id="temp-access-settings-page">
+			<div class="wrap">
+				<h1 class="wp-heading-inline"><?php echo esc_html( __( 'Temporary Access Settings', 'temporary-access' ) ); ?></h1>
+				<div id="temp-access-root"></div>
+			</div>
+		</div>
+		<?php
+	}
 }

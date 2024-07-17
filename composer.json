@@ -17,5 +17,21 @@
     "require": {
         "php": ">=7.3",
         "pimple/pimple": "3.*"
+    },
+    "require-dev": {
+        "automattic/vipwpcs": "^3",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "squizlabs/php_codesniffer": "^3.7",
+        "wp-coding-standards/wpcs": "^3"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "lint-fix": "phpcbf"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }

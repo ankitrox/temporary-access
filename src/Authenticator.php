@@ -3,7 +3,7 @@
  * Authenticate the user.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -19,6 +19,7 @@ use Ankit\TemporaryAccess\Utils\Helper;
  * @package Ankit\TemporaryAccess
  */
 class Authenticator {
+
 
 	/**
 	 * User manager instance.
@@ -42,7 +43,7 @@ class Authenticator {
 	 * @return void
 	 */
 	public function init(): void {
-		add_action( 'init', [ $this, 'authenticate' ], 5 );
+		add_action( 'init', array( $this, 'authenticate' ), 5 );
 	}
 
 	/**
@@ -67,7 +68,7 @@ class Authenticator {
 		$perform_login = true;
 
 		if ( is_user_logged_in() ) {
-			if ( $user_id !== get_current_user_id() ) {
+			if ( get_current_user_id() !== $user_id ) {
 				wp_logout();
 			} else {
 				$perform_login = false;

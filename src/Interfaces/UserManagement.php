@@ -3,7 +3,7 @@
  * User management Interface.
  *
  * @package Ankit\TemporaryAccess
- * @since 1.0.0
+ * @since   1.0.0
  */
 
 declare(strict_types=1);
@@ -18,6 +18,7 @@ use WP_User;
  * @package WpGuruDev\OrderExport\Interfaces
  */
 interface UserManagement {
+
 
 	const START_DATE_KEY = 'tempaccess_start';
 
@@ -43,17 +44,17 @@ interface UserManagement {
 	/**
 	 * Retrieve user(s).
 	 *
-	 * @param int|null $uid User ID.
-	 * @param array $args Query arguments.
+	 * @param int|null $uid  User ID.
+	 * @param array    $args Query arguments.
 	 *
 	 * @return WP_User|array
 	 */
-	public function read( int $uid = null, array $args = [] );
+	public function read( int $uid = null, array $args = array() );
 
 	/**
 	 * Update an existing temporary user.
 	 *
-	 * @param int $uid User ID.
+	 * @param int   $uid  User ID.
 	 * @param array $args User args.
 	 *
 	 * @return \stdClass
@@ -71,6 +72,8 @@ interface UserManagement {
 
 	/**
 	 * Fetch the user by token.
+	 *
+	 * @param string $token Token.
 	 *
 	 * @return mixed
 	 */

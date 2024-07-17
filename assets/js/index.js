@@ -2,30 +2,24 @@ import Store from './store';
 import TempAccess from './components/TempAccess';
 import '../css/tempaccess.scss';
 
-const { subscribe } = wp.data;
 const { register } = wp.data;
 const { domReady } = wp;
-const { render } = wp.element;
+const { createRoot } = wp.element;
 
 /**
  * Render the root component.
+ * @param {HTMLDivElement} rootElement Root element where UI will be rendered.
+ * @return {void} Renders the root component.
  */
-const renderElement = () => {
-    render(
-        <TempAccess />,
-        document.getElementById( 'temp-access-root' )
-    );
+const renderElement = (rootElement) => {
+	rootElement.render(<TempAccess />);
 };
 
 /**
  * Mount component when DOM is ready.
  */
-domReady ( () => {
-    register( Store );
-    renderElement();
+domReady(() => {
+	const rootElement = createRoot(document.getElementById('temp-access-root'));
+	register(Store);
+	renderElement(rootElement);
 });
-
-/**
- * Subscribe to state change for re-rendering.
- */
-subscribe( renderElement );

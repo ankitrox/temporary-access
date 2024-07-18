@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Ankit\TemporaryAccess\Interfaces;
 
+use stdClass;
 use WP_User;
 
 /**
@@ -39,7 +40,7 @@ interface UserManagement {
 	 *
 	 * @return WP_User
 	 */
-	public function create( array $args ): WP_User;
+	public function create( array $args ): stdClass;
 
 	/**
 	 * Retrieve user(s).

@@ -16,6 +16,7 @@ use Ankit\TemporaryAccess\Interfaces\UserManagement;
 use Exception;
 use Throwable;
 use InvalidArgumentException;
+use stdClass;
 use WP_User;
 
 /**
@@ -43,11 +44,11 @@ class UserManager implements UserManagement {
 	 *
 	 * @param array $args User arguments.
 	 *
-	 * @return WP_User
+	 * @return stdClass
 	 * @throws Exception Exception for user creation.
 	 * @throws Throwable WP Errors.
 	 */
-	public function create( array $args ): WP_User {
+	public function create( array $args ): stdClass {
 		try {
 			$args = wp_parse_args(
 				$args,
@@ -82,7 +83,7 @@ class UserManager implements UserManagement {
 			 */
 			do_action( 'tempaccess.user_created', $user, $args );
 
-			return $user;
+			return ( new APIUser( $user->ID ) )->get_modal();
 
 		} catch ( Throwable $e ) {
 
@@ -265,8 +266,9 @@ class UserManager implements UserManagement {
 	public function associate_meta( WP_User $user, array $args ): void {
 		// Token would only be generated during user creation.
 		if ( 'tempaccess.user_created' === current_action() ) {
-			$start_date = strtotime( $args['start_date'] ) ?? strtotime( 'now' );
-			$end_date   = strtotime( $args['end_date'] ) ?? strtotime( '+1 day' );
+			// Start date and end date will always be present during user creation.
+			$start_date = $args['start_date'];
+			$end_date   = $args['end_date'];
 			$token      = $user->ID . time() . uniqid( '', true );
 			$token      = md5( $token );
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );

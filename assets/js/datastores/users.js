@@ -1,5 +1,5 @@
 /**
- * `modules/reader-revenue-manager` data store: publications.
+ * Data store: users
  */
 
 /**
@@ -18,20 +18,26 @@ const fetchGetUsers = createFetchStore({
 				page: 1,
 			},
 		}),
-	reducerCallback: (state, users) => ({ ...state, users }),
+	reducerCallback: (state, users) => {
+		return { ...state, users };
+	},
 });
 
 const fetchCreateUser = createFetchStore({
 	baseName: 'createUser',
-	controlCallback: (userData) =>
-		API.set({
-			bodyParams: userData,
-		}),
+	controlCallback: (userData) => API.set(userData),
 	reducerCallback: (state, user) => {
-		return { ...state.users, user };
+		return { ...state, users: [...state.users, user] };
 	},
 	validateParams: validateUserCreationParams,
+	argsToParams: (data) => ({
+		user_email: data.user_email,
+	}),
 });
+
+const baseInitialState = {
+	users: [],
+};
 
 const baseActions = {
 	/**
@@ -39,13 +45,11 @@ const baseActions = {
 	 * @return {Array} Array of users objects.
 	 */
 	*getUsers() {
-		const { users } = yield fetchGetUsers.actions.fetchGetUsers();
-		return users;
+		yield fetchGetUsers.actions.fetchGetUsers();
 	},
 
 	*createUser(userData) {
-		const user = yield fetchCreateUser.actions.fetchCreateUser(userData);
-		return user;
+		yield fetchCreateUser.actions.fetchCreateUser(userData);
 	},
 };
 
@@ -57,13 +61,19 @@ const baseReducer = (state, { type }) => {
 	}
 };
 
+const baseSelectors = {
+	getState(state) {
+		return state;
+	},
+};
+
 const store = combineStores(fetchGetUsers, fetchCreateUser, {
-	initialState: {},
+	initialState: baseInitialState,
 	actions: baseActions,
 	controls: {},
 	reducer: baseReducer,
 	resolvers: {},
-	selectors: {},
+	selectors: baseSelectors,
 });
 
 export const initialState = store.initialState;

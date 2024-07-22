@@ -1,5 +1,5 @@
 /**
- * API function to create fetch store.
+ * API function to create error store.
  */
 
 /**

@@ -20,5 +20,5 @@ export const validateUserCreationParams = function (userData) {
 		__('Params must be an object', 'temporary-access')
 	);
 
-	invariant(userData.email, `Email is required.`);
+	invariant(userData.user_email, `Email is required.`);
 };

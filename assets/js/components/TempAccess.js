@@ -1,7 +1,7 @@
 import AddNewUser from './AddNewUser';
 import name from '../store/name';
 import EditForm from './EditForm';
-import UsersList from './UsersList';
+import UsersTable from '../components/ListUsers/UsersTable';
 
 const { withSelect, dispatch } = wp.data;
 const { isEmpty } = window.lodash;
@@ -12,7 +12,7 @@ let TempAccess = ({ context = null, notification = null }) => {
 		'view' === context ? (
 			<>
 				<AddNewUser />
-				<UsersList />
+				<UsersTable />
 			</>
 		) : (
 			<EditForm />

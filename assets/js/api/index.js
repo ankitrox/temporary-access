@@ -13,11 +13,13 @@ import { addQueryArgs } from '@wordpress/url';
  * @param {string} param0.method      HTTP method to use.
  * @param {Object} param0.queryParams Query parameters to be sent to the endpoint.
  * @param {Object} param0.signal      Abort signal to cancel the request.
+ * @param {string} param0.path        Path to the endpoint.
  * @return {Promise} Response from the endpoint.
  */
 export const tempAccessRequest = async ({
 	data,
 	method = 'GET',
+	path = '',
 	queryParams,
 	signal,
 }) => {
@@ -27,7 +29,7 @@ export const tempAccessRequest = async ({
 			data,
 			method,
 			signal,
-			url: addQueryArgs(tempAccess?.path, queryParams),
+			url: addQueryArgs(`${tempAccess?.path}/${path}`, queryParams),
 		});
 
 		return response;
@@ -68,9 +70,32 @@ export const set = async (data, options = {}) => {
 	return response;
 };
 
+/**
+ * Utility for making POST requests.
+ * @param {Object} data    Data to sent to the endpoint.
+ * @param {Object} options Extra options for request customization.
+ * @return {Promise} Response from the endpoint.
+ */
+export const remove = async (data, options = {}) => {
+	const { method = 'DELETE', path = '', queryParams, signal } = options;
+	const response = await tempAccessRequest({
+		data,
+		method,
+		queryParams,
+		path,
+		signal,
+	});
+
+	return response;
+};
+
+/**
+ * API object.
+ */
 const API = {
 	get,
 	set,
+	remove,
 };
 
 export default API;

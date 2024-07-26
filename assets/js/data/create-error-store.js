@@ -20,7 +20,7 @@ const CLEAR_ERRORS = 'CLEAR_ERRORS';
 /**
  * Internal dependencies
  */
-import { stringifyObject } from './stringify';
+import { stringifyObject } from '../utils/stringify';
 
 export function generateErrorKey(baseName, args) {
 	if (args && Array.isArray(args)) {

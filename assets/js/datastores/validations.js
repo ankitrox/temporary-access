@@ -21,4 +21,11 @@ export const validateUserCreationParams = function (userData) {
 	);
 
 	invariant(userData.user_email, `Email is required.`);
+
+	return true;
+};
+
+export const validateUserID = function ({ userId }) {
+	invariant(userId, `User ID is required.`);
+	invariant(typeof userId === 'number', `User ID must be a number.`);
 };

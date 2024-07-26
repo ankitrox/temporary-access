@@ -14,8 +14,8 @@ import { actions as errorStoreActions } from './create-error-store';
 import {
 	camelCaseToPascalCase,
 	camelCaseToConstantCase,
-} from './transform-case';
-import { stringifyObject } from './stringify';
+} from '../utils/transform-case';
+import { stringifyObject } from '../utils/stringify';
 
 const { isPlainObject } = lodash;
 

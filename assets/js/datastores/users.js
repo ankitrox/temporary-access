@@ -8,19 +8,37 @@
 import API from '../tempuser-api';
 import { createFetchStore } from '../data/create-fetch-store';
 import { combineStores } from '../data/utils';
-import { validateUserCreationParams } from './validations';
+import { validateUserCreationParams, validateUserID } from './validations';
+import { stringifyObject } from '../utils/stringify';
+import invariant from 'invariant';
+
+const { isPlainObject } = lodash;
 
 const fetchGetUsers = createFetchStore({
 	baseName: 'getUsers',
-	controlCallback: () =>
-		API.get({
+	controlCallback: () => {
+		return API.get({
 			queryParams: {
-				page: 1,
+				params: 1,
 			},
-		}),
-	reducerCallback: (state, users) => {
-		return { ...state, users };
+		});
 	},
+	reducerCallback: (state, users, params) => {
+		const hash = stringifyObject(params);
+		return {
+			...state,
+			users: {
+				...state.users,
+				[hash]: users,
+			},
+		};
+	},
+	validateParams: (params) => {
+		invariant(isPlainObject(params), 'params is required.');
+		invariant(params.page !== undefined, 'page is required.');
+		invariant(typeof params.page === 'number', 'page should be number.');
+	},
+	argsToParams: (params) => params,
 });
 
 const fetchCreateUser = createFetchStore({
@@ -30,26 +48,53 @@ const fetchCreateUser = createFetchStore({
 		return { ...state, users: [...state.users, user] };
 	},
 	validateParams: validateUserCreationParams,
-	argsToParams: (data) => ({
-		user_email: data.user_email,
-	}),
+	argsToParams: (data) => {
+		return {
+			user_email: data?.user_email,
+		};
+	},
 });
 
+const fetchDeleteUser = createFetchStore({
+	baseName: 'deleteUser',
+	controlCallback: (userData) => {
+		const options = { method: 'DELETE', path: userData.userId };
+		return API.remove({}, options);
+	},
+	reducerCallback: (state, userID) => {
+		const users = state.users.filter((u) => u.ID !== userID);
+		return { ...state, users };
+	},
+	validateParams: validateUserID,
+	argsToParams: (params) => {
+		return { userId: params?.userId };
+	},
+});
+
+/**
+ * Initial state for the store.
+ */
 const baseInitialState = {
 	users: [],
 };
 
 const baseActions = {
 	/**
-	 * Generator action to retrieve users.
-	 * @return {Array} Array of users objects.
+	 * Generator action to create a user.
+	 * @param {Object} userData
+	 * @param {string} userData.user_email User email.
+	 * @return {Object} User object.
 	 */
-	*getUsers() {
-		yield fetchGetUsers.actions.fetchGetUsers();
-	},
-
 	*createUser(userData) {
 		yield fetchCreateUser.actions.fetchCreateUser(userData);
+	},
+
+	/**
+	 * Generator action to delete a user.
+	 * @param {number} userId User ID to delete.
+	 */
+	*deleteUser(userId) {
+		yield fetchDeleteUser.actions.fetchDeleteUser({ userId });
 	},
 };
 
@@ -61,18 +106,41 @@ const baseReducer = (state, { type }) => {
 	}
 };
 
-const baseSelectors = {
-	getState(state) {
-		return state;
+const baseResolvers = {
+	*getUsers(args) {
+		yield fetchGetUsers.actions.fetchGetUsers(args);
 	},
 };
 
-const store = combineStores(fetchGetUsers, fetchCreateUser, {
+const baseSelectors = {
+	/**
+	 * Get the state.
+	 * @param {Object} state State of the data store.
+	 * @return {Object} State of the data store.
+	 */
+	getState(state) {
+		return state;
+	},
+
+	/**
+	 * Get users.
+	 * @param {Object} state State of the data store.
+	 * @param {Object} args  Arguments for the selector.
+	 * @return {Array} Users.
+	 */
+	getUsers(state, args = {}) {
+		const hash = stringifyObject(args);
+
+		return state.users[hash];
+	},
+};
+
+const store = combineStores(fetchGetUsers, fetchCreateUser, fetchDeleteUser, {
 	initialState: baseInitialState,
 	actions: baseActions,
 	controls: {},
 	reducer: baseReducer,
-	resolvers: {},
+	resolvers: baseResolvers,
 	selectors: baseSelectors,
 });
 

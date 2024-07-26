@@ -26,7 +26,6 @@ use WP_User;
  */
 class UserManager implements UserManagement {
 
-
 	/**
 	 * Initialization setup.
 	 *

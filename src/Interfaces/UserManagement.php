@@ -34,6 +34,11 @@ interface UserManagement {
 	const TOKEN_KEY = 'tempaccess_token';
 
 	/**
+	 * Last login meta key.
+	 */
+	const LAST_LOGIN_KEY = 'tempaccess_last_login';
+
+	/**
 	 * Create the temporary user.
 	 *
 	 * @param array $args User creation args.

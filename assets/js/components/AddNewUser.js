@@ -10,7 +10,7 @@ let AddNewUser = (props) => {
 		<>
 			<Button
 				text={__('Add New User', 'temporary-access')}
-				isSecondary
+				isPrimary
 				onClick={onclick}
 				className={'add_new-button'}
 			/>

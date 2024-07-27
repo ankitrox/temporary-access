@@ -7,9 +7,13 @@
  */
 import { __ } from '@wordpress/i18n';
 
+/**
+ * Internal dependencies
+ */
 import invariant from 'invariant';
 import { combineStores } from '../data/utils';
 
+// Allowed notice types.
 const allowedNoticeTypes = ['error', 'warning', 'success', 'info'];
 
 const baseInitialState = {
@@ -99,9 +103,16 @@ const baseReducer = (state, { type, payload }) => {
 			const { code, message, noticeType } = payload;
 			const newNotice = { code, message, noticeType };
 
+			// Filter any notice with the same code and for a new list.
+			const newNotices = state.notices.filter(
+				(notice) => notice.code !== code
+			);
+
+			newNotices.push(newNotice);
+
 			return {
 				...state,
-				notices: [...state.notices, newNotice],
+				notices: newNotices,
 			};
 		}
 

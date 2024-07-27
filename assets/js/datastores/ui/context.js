@@ -2,7 +2,7 @@
  * Context data store.
  */
 
-import { combineStores } from '../data/utils';
+import { combineStores } from '../../data/utils';
 
 const baseInitialState = {
 	context: 'default',

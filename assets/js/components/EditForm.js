@@ -1,172 +1,32 @@
-/* eslint-disable no-shadow */
-/* eslint-disable camelcase */
-/*
- * Copyright 2021 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+/**
+ * Add/Edit form for the user.
  */
+
+/**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { Button } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-import name from '../store/name';
-import { SaveField } from '../../utils';
+import { UI_STORE_NAME } from '../datastores/constants';
 
-const { TextControl, SelectControl, BaseControl, Button, Spinner } =
-	wp.components;
-
-const { roles } = tempAccess;
-const { map } = window.lodash;
-const { __ } = wp.i18n;
-const { withDispatch, withSelect, dispatch } = wp.data;
-
-const getRoles = () => {
-	const rolesList = {
-		'': __('Select Role', 'temporary-access'),
-		...roles,
-	};
-
-	return map(rolesList, (value, key) => {
-		return {
-			label: value,
-			value: key,
-		};
-	});
-};
-
-let EditForm = (props) => {
-	const { setContext, currentData, processing, createUser } = props;
-	const {
-		ID,
-		user_email,
-		first_name,
-		last_name,
-		role,
-		start_date,
-		end_date,
-		redirect,
-	} = currentData;
-
-	const ButtonLabel = !ID
-		? __('Create', 'temporary-access')
-		: __('Update', 'temporary-access');
-
+export default function EditForm() {
+	const { setContext } = useDispatch(UI_STORE_NAME);
 	return (
-		<div className={'tempaccess_editform'}>
-			<BaseControl>
-				<TextControl
-					label={__('Email (Required)', 'temporary-access')}
-					type={'email'}
-					value={user_email}
-					onChange={(val) => SaveField('user_email', val)}
-					autoComplete="off"
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<TextControl
-					label={__('First Name', 'temporary-access')}
-					type={'text'}
-					value={first_name}
-					onChange={(val) => SaveField('first_name', val)}
-					autoComplete="off"
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<TextControl
-					label={__('Last Name', 'temporary-access')}
-					type={'text'}
-					value={last_name}
-					onChange={(val) => SaveField('last_name', val)}
-					autoComplete="off"
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<SelectControl
-					label={__('Role', 'temporary-access')}
-					value={role}
-					options={getRoles()}
-					onChange={(updatedRole) => SaveField('role', updatedRole)}
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<TextControl
-					label={__('Start Date and Time', 'temporary-access')}
-					type={'datetime-local'}
-					value={start_date}
-					onChange={(val) => SaveField('start_date', val)}
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<TextControl
-					label={__(
-						'End Date and Time (Required)',
-						'temporary-access'
-					)}
-					type={'datetime-local'}
-					value={end_date}
-					onChange={(val) => SaveField('end_date', val)}
-				/>
-			</BaseControl>
-
-			<BaseControl>
-				<TextControl
-					label={__('Post Login Redirect URL', 'temporary-access')}
-					type={'url'}
-					value={redirect}
-					onChange={(val) => SaveField('redirect', val)}
-					autoComplete="off"
-				/>
-			</BaseControl>
-
-			<BaseControl className={'tempaccess_action_buttons'}>
-				<Button text={ButtonLabel} onClick={createUser} isPrimary />
-
-				<Button
-					text={__('Close', 'temporary-access')}
-					onClick={() => {
-						dispatch(name).reset();
-						setContext('view');
-					}}
-					isSecondary
-				/>
-
-				{processing && <Spinner />}
-			</BaseControl>
+		<div className="tempaccess-edit-form">
+			<h2>{__('Edit Form', 'temporary-access')}</h2>
+			<Button
+				variant="primary"
+				onClick={() => {
+					setContext('default');
+				}}
+			>
+				{__('Close', 'temporary-access')}
+			</Button>
 		</div>
 	);
-};
-
-EditForm = withSelect((select) => {
-	return {
-		currentData: select(name).getCurrentEditData(),
-		processing: select(name).isProcessing(),
-	};
-})(EditForm);
-
-EditForm = withDispatch((dispatch) => {
-	return {
-		setContext: (context = 'view') => {
-			dispatch(name).setContext(context);
-		},
-		createUser: () => {
-			dispatch(name).createUser();
-		},
-	};
-})(EditForm);
-
-export default EditForm;
+}

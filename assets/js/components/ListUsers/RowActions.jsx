@@ -17,6 +17,7 @@ import { STORE_NAME } from '../../datastores/constants';
 export default function RowActions({ user }) {
 	const { setContext, setNotice } = useDispatch(STORE_NAME);
 
+	// Copy the login link to the clipboard and show a notice.
 	const onCopyLink = async (userData) => {
 		// eslint-disable-next-line camelcase
 		const { _login_url } = userData;
@@ -46,7 +47,7 @@ export default function RowActions({ user }) {
 				icon="email"
 				title={__('Email login link', 'temporary-access')}
 				isPressed={false}
-				onClick={() => console.log(user)}
+				onClick={() => {}}
 			/>
 			<Button
 				icon="admin-links"

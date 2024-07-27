@@ -149,7 +149,7 @@ export const collectName = (...args) => {
  * @param {Object} state A store's state.
  * @return {Object} The same state data as passed in `state`.
  */
-const passthroughReducer = (state) => state;
+export const passthroughReducer = (state) => state;
 
 /**
  * Combines multiple stores.

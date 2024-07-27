@@ -7,7 +7,7 @@
  */
 import API from '../tempuser-api';
 import { createFetchStore } from '../data/create-fetch-store';
-import { combineStores } from '../data/utils';
+import { combineStores, passthroughReducer } from '../data/utils';
 import { validateUserCreationParams, validateUserID } from './validations';
 import { stringifyObject } from '../utils/stringify';
 import invariant from 'invariant';
@@ -16,10 +16,12 @@ const { isPlainObject } = lodash;
 
 const fetchGetUsers = createFetchStore({
 	baseName: 'getUsers',
-	controlCallback: () => {
+	controlCallback: (params) => {
+		const { page, pageSize } = params;
 		return API.get({
 			queryParams: {
-				params: 1,
+				page: page + 1, // API is 1-based.
+				per_page: pageSize,
 			},
 		});
 	},
@@ -98,14 +100,6 @@ const baseActions = {
 	},
 };
 
-const baseReducer = (state, { type }) => {
-	switch (type) {
-		default: {
-			return state;
-		}
-	}
-};
-
 const baseResolvers = {
 	*getUsers(args) {
 		yield fetchGetUsers.actions.fetchGetUsers(args);
@@ -139,7 +133,7 @@ const store = combineStores(fetchGetUsers, fetchCreateUser, fetchDeleteUser, {
 	initialState: baseInitialState,
 	actions: baseActions,
 	controls: {},
-	reducer: baseReducer,
+	reducer: passthroughReducer,
 	resolvers: baseResolvers,
 	selectors: baseSelectors,
 });

@@ -105,7 +105,7 @@ class UserManager implements UserManagement {
 		$page         = $args['page'] ?? 1;
 		$orderby      = $args['orderby'] ?? 'user_registered';
 		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
-		$number       = apply_filters( 'tempaccess.read_users', 10 );
+		$number       = $args['per_page'] ?? apply_filters( 'tempaccess.read_users', 10 );
 		$users_args   = array(
 			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(

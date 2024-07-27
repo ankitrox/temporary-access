@@ -45,8 +45,19 @@ class Settings {
 		}
 
 		wp_register_script(
+			'wp-temp-access-api',
+			trailingslashit( plugin()->url ) . 'assets/build/api.js',
+			array(
+				'wp-api-fetch',
+				'wp-url',
+			),
+			filemtime( trailingslashit( plugin()->path ) . 'assets/build/temp-access.js', ),
+			true
+		);
+
+		wp_register_script(
 			'wp-temp-access',
-			trailingslashit( plugin()->url ) . 'assets/build/index.js',
+			trailingslashit( plugin()->url ) . 'assets/build/temp-access.js',
 			array(
 				'lodash',
 				'wp-api-fetch',
@@ -57,8 +68,11 @@ class Settings {
 				'wp-dom-ready',
 				'wp-element',
 				'wp-notices',
+				'wp-api-fetch',
+				'wp-url',
+				'wp-temp-access-api',
 			),
-			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.js', ),
+			filemtime( trailingslashit( plugin()->path ) . 'assets/build/temp-access.js', ),
 			true
 		);
 
@@ -76,13 +90,14 @@ class Settings {
 			'before'
 		);
 
+		wp_enqueue_script( 'wp-temp-access-api' );
 		wp_enqueue_script( 'wp-temp-access' );
 		wp_enqueue_style( 'wp-components' );
 		wp_enqueue_style(
 			'temp-access-css',
-			trailingslashit( plugin()->url ) . 'assets/build/index.css',
+			trailingslashit( plugin()->url ) . 'assets/build/temp-access.css',
 			array(),
-			filemtime( trailingslashit( plugin()->path ) . 'assets/build/index.css' ),
+			filemtime( trailingslashit( plugin()->path ) . 'assets/build/temp-access.css' ),
 		);
 	}
 

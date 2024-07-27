@@ -16,7 +16,9 @@ use Ankit\TemporaryAccess\Interfaces\UserManagement;
 use Exception;
 use Throwable;
 use InvalidArgumentException;
+use stdClass;
 use WP_User;
+use WP_User_Query;
 
 /**
  * Class UserManager
@@ -24,7 +26,6 @@ use WP_User;
  * @package Ankit\TemporaryAccess
  */
 class UserManager implements UserManagement {
-
 
 	/**
 	 * Initialization setup.
@@ -43,11 +44,11 @@ class UserManager implements UserManagement {
 	 *
 	 * @param array $args User arguments.
 	 *
-	 * @return WP_User
+	 * @return stdClass
 	 * @throws Exception Exception for user creation.
 	 * @throws Throwable WP Errors.
 	 */
-	public function create( array $args ): WP_User {
+	public function create( array $args ): stdClass {
 		try {
 			$args = wp_parse_args(
 				$args,
@@ -82,7 +83,7 @@ class UserManager implements UserManagement {
 			 */
 			do_action( 'tempaccess.user_created', $user, $args );
 
-			return $user;
+			return ( new APIUser( $user->ID ) )->get_modal();
 
 		} catch ( Throwable $e ) {
 
@@ -101,11 +102,14 @@ class UserManager implements UserManagement {
 	 * @return WP_User|array
 	 */
 	public function read( int $uid = null, array $args = array() ) {
-		$return_users = array();
+		$response = [
+			'users' => [],
+			'total' => 0,
+		];
 		$page         = $args['page'] ?? 1;
 		$orderby      = $args['orderby'] ?? 'user_registered';
 		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
-		$number       = apply_filters( 'tempaccess.read_users', 10 );
+		$number       = $args['per_page'] ?? apply_filters( 'tempaccess.read_users', 10 );
 		$users_args   = array(
 			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
@@ -119,24 +123,30 @@ class UserManager implements UserManagement {
 		$users_args['paged']   = $page;
 		$users_args['orderby'] = $orderby;
 		$users_args['order']   = $order;
+		$users_args['count_total']   = true;
 
 		if ( $uid ) {
 			$users_args['include'] = array( $uid );
 		}
 
-		$users = get_users( $users_args );
+		$users = new WP_User_Query( $users_args );
+		$total = $users->get_total();
+		$users = $users->get_results();
 
 		if ( ! empty( $users ) ) {
-			foreach ( $users as $user ) {
-				$return_users[] = ( new APIUser( $user->ID ) )->get_modal();
-			}
+			$response['users'] = array_map(
+				function ( $user ) {
+					return ( new APIUser( $user->ID ) )->get_modal();
+				},
+				$users
+			);
+
+			$response['total'] = $total;
+
+			return $response;
 		}
 
-		if ( $uid && isset( $return_users[0] ) ) {
-			return $return_users[0];
-		}
-
-		return $return_users;
+		return $response;
 	}
 
 	/**
@@ -265,8 +275,9 @@ class UserManager implements UserManagement {
 	public function associate_meta( WP_User $user, array $args ): void {
 		// Token would only be generated during user creation.
 		if ( 'tempaccess.user_created' === current_action() ) {
-			$start_date = strtotime( $args['start_date'] ) ?? strtotime( 'now' );
-			$end_date   = strtotime( $args['end_date'] ) ?? strtotime( '+1 day' );
+			// Start date and end date will always be present during user creation.
+			$start_date = $args['start_date'];
+			$end_date   = $args['end_date'];
 			$token      = $user->ID . time() . uniqid( '', true );
 			$token      = md5( $token );
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );

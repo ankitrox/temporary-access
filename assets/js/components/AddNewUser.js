@@ -1,29 +1,36 @@
-import name from '../store/name';
+/**
+ * Add New User Component.
+ */
 
-const { Button } = wp.components;
-const { __ } = wp.i18n;
-const { withDispatch } = wp.data;
+/**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+import { Button, __experimentalSpacer as Spacer } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
+import { Fragment } from '@wordpress/element';
 
-let AddNewUser = (props) => {
-	const { onclick } = props;
+/**
+ * Internal dependencies
+ */
+import { UI_STORE_NAME } from '../datastores/constants';
+
+/**
+ * Add New User Component.
+ *
+ * @return {Object} AddNewUser component.
+ */
+export default function AddNewUser() {
+	const { setContext } = useDispatch(UI_STORE_NAME);
+
 	return (
-		<>
-			<Button
-				text={__('Add New User', 'temporary-access')}
-				isSecondary
-				onClick={onclick}
-				className={'add_new-button'}
-			/>
-		</>
+		<Fragment>
+			<Spacer marginY={5}>
+				<Button variant="primary" onClick={() => setContext('edit')}>
+					{__('Add New User', 'temporary-access')}
+				</Button>
+			</Spacer>
+		</Fragment>
 	);
-};
-
-AddNewUser = withDispatch((dispatch) => {
-	return {
-		onclick: () => {
-			dispatch(name).setContext('edit');
-		},
-	};
-})(AddNewUser);
-
-export default AddNewUser;
+}

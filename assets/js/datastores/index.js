@@ -1,0 +1,20 @@
+/**
+ * Main file for exporting the store.
+ */
+
+/**
+ * WordPress dependencies
+ */
+import { createReduxStore } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import users from './users';
+import notifications from './notifications';
+import { combineStores } from '../data/utils';
+import { STORE_NAME } from './constants';
+
+const store = combineStores(notifications, users);
+
+export default createReduxStore(STORE_NAME, store);

@@ -1,47 +1,36 @@
+/**
+ * Main component for TempAccess UI.
+ */
+
+/**
+ * WordPress dependencies
+ */
+import { Fragment } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
 import AddNewUser from './AddNewUser';
-import name from '../store/name';
 import EditForm from './EditForm';
-import UsersList from './UsersList';
+import Notices from './Notices';
+import UsersTable from '../components/ListUsers/UsersTable';
+import { UI_STORE_NAME } from '../datastores/constants';
 
-const { withSelect, dispatch } = wp.data;
-const { isEmpty } = window.lodash;
-const { Notice } = wp.components;
+export default function TempAccess() {
+	// Get the current context.
+	const context = useSelect((select) => select(UI_STORE_NAME).getContext());
 
-let TempAccess = ({ context = null, notification = null }) => {
-	const ContextualComponent =
-		'view' === context ? (
-			<>
-				<AddNewUser />
-				<UsersList />
-			</>
-		) : (
-			<EditForm />
-		);
-
-	const { type, message } = notification;
 	return (
-		<>
-			{!isEmpty(message) && (
-				<Notice
-					status={type}
-					onRemove={() => {
-						dispatch(name).setNotifier({ type: '', message: '' });
-					}}
-				>
-					{message}
-				</Notice>
+		<div className="tempaccess">
+			<Notices />
+			{context === 'edit' && <EditForm />}
+			{context === 'default' && (
+				<Fragment>
+					<AddNewUser />
+					<UsersTable />
+				</Fragment>
 			)}
-
-			{ContextualComponent}
-		</>
+		</div>
 	);
-};
-
-TempAccess = withSelect((select) => {
-	return {
-		context: select(name).getContext(),
-		notification: select(name).getNotifier(),
-	};
-})(TempAccess);
-
-export default TempAccess;
+}

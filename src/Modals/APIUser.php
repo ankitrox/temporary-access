@@ -72,6 +72,14 @@ class APIUser {
 		);
 		$user_obj->expired    = ( $user_obj->expiration < time() );
 
+		$last_login = get_user_meta( $this->user_id, $user_manager::LAST_LOGIN_KEY, true );
+
+		if ( $last_login ) {
+			$user_obj->last_login = human_time_diff( $last_login, time() );
+		} else {
+			$user_obj->last_login = __( 'Never', 'temporary-access' );
+		}
+
 		return apply_filters( 'tempaccess.api_user_modal', $user_obj );
 	}
 }

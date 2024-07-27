@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Ankit\TemporaryAccess\Interfaces;
 
+use stdClass;
 use WP_User;
 
 /**
@@ -33,13 +34,18 @@ interface UserManagement {
 	const TOKEN_KEY = 'tempaccess_token';
 
 	/**
+	 * Last login meta key.
+	 */
+	const LAST_LOGIN_KEY = 'tempaccess_last_login';
+
+	/**
 	 * Create the temporary user.
 	 *
 	 * @param array $args User creation args.
 	 *
 	 * @return WP_User
 	 */
-	public function create( array $args ): WP_User;
+	public function create( array $args ): stdClass;
 
 	/**
 	 * Retrieve user(s).

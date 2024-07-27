@@ -1,10 +1,13 @@
-import Store from './store';
-import TempAccess from './components/TempAccess';
-import '../css/tempaccess.scss';
+/**
+ * WordPress dependencies
+ */
+import { register } from '@wordpress/data';
+import domReady from '@wordpress/dom-ready';
+import { createRoot } from '@wordpress/element';
 
-const { register } = wp.data;
-const { domReady } = wp;
-const { createRoot } = wp.element;
+import TempAccess from './components/TempAccess';
+import dataStore from './datastores';
+import uiStore from './datastores/ui';
 
 /**
  * Render the root component.
@@ -19,7 +22,9 @@ const renderElement = (rootElement) => {
  * Mount component when DOM is ready.
  */
 domReady(() => {
+	// Register the data stores.
+	[dataStore, uiStore].forEach((store) => register(store));
+
 	const rootElement = createRoot(document.getElementById('temp-access-root'));
-	register(Store);
 	renderElement(rootElement);
 });

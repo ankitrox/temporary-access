@@ -18,6 +18,7 @@ use Throwable;
 use InvalidArgumentException;
 use stdClass;
 use WP_User;
+use WP_User_Query;
 
 /**
  * Class UserManager
@@ -101,7 +102,10 @@ class UserManager implements UserManagement {
 	 * @return WP_User|array
 	 */
 	public function read( int $uid = null, array $args = array() ) {
-		$return_users = array();
+		$response = [
+			'users' => [],
+			'total' => 0,
+		];
 		$page         = $args['page'] ?? 1;
 		$orderby      = $args['orderby'] ?? 'user_registered';
 		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
@@ -119,24 +123,30 @@ class UserManager implements UserManagement {
 		$users_args['paged']   = $page;
 		$users_args['orderby'] = $orderby;
 		$users_args['order']   = $order;
+		$users_args['count_total']   = true;
 
 		if ( $uid ) {
 			$users_args['include'] = array( $uid );
 		}
 
-		$users = get_users( $users_args );
+		$users = new WP_User_Query( $users_args );
+		$total = $users->get_total();
+		$users = $users->get_results();
 
 		if ( ! empty( $users ) ) {
-			foreach ( $users as $user ) {
-				$return_users[] = ( new APIUser( $user->ID ) )->get_modal();
-			}
+			$response['users'] = array_map(
+				function ( $user ) {
+					return ( new APIUser( $user->ID ) )->get_modal();
+				},
+				$users
+			);
+
+			$response['total'] = $total;
+
+			return $response;
 		}
 
-		if ( $uid && isset( $return_users[0] ) ) {
-			return $return_users[0];
-		}
-
-		return $return_users;
+		return $response;
 	}
 
 	/**

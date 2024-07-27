@@ -25,7 +25,7 @@ const fetchGetUsers = createFetchStore({
 			},
 		});
 	},
-	reducerCallback: (state, users, params) => {
+	reducerCallback: (state, { users, total }, params) => {
 		const hash = stringifyObject(params);
 		return {
 			...state,
@@ -33,6 +33,7 @@ const fetchGetUsers = createFetchStore({
 				...state.users,
 				[hash]: users,
 			},
+			total,
 		};
 	},
 	validateParams: (params) => {
@@ -78,6 +79,7 @@ const fetchDeleteUser = createFetchStore({
  */
 const baseInitialState = {
 	users: [],
+	total: 0,
 };
 
 const baseActions = {
@@ -126,6 +128,10 @@ const baseSelectors = {
 		const hash = stringifyObject(args);
 
 		return state.users[hash];
+	},
+
+	getTotalUsers(state) {
+		return state.total;
 	},
 };
 

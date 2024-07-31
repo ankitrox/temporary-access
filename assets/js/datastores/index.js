@@ -11,10 +11,10 @@ import { createReduxStore } from '@wordpress/data';
  * Internal dependencies
  */
 import users from './users';
-import notifications from './notifications';
+import notices from './notices';
 import { combineStores } from '../data/utils';
 import { STORE_NAME } from './constants';
 
-const store = combineStores(notifications, users);
+const store = combineStores(notices, users);
 
 export default createReduxStore(STORE_NAME, store);

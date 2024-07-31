@@ -1,5 +1,6 @@
 /**
  * Edit Form Data Store.
+ * This is the form which is used to add and edit users.
  */
 
 import { combineStores } from '../../data/utils';
@@ -7,6 +8,9 @@ import { combineStores } from '../../data/utils';
 const baseInitialState = {
 	step: 0,
 	user: null,
+	errors: [],
+	data: {},
+	stepValidationFn: () => true,
 };
 
 const baseActions = {
@@ -22,6 +26,14 @@ const baseActions = {
 			payload: { step },
 		};
 	},
+
+	setStepValidationFn(validationFn) {
+		return {
+			type: 'SET_STEP_VALIDATION_FN',
+			payload: { validationFn },
+		};
+	},
+
 	/**
 	 * Increments the step.
 	 *
@@ -32,6 +44,7 @@ const baseActions = {
 			type: 'INCREMENT_STEP',
 		};
 	},
+
 	/**
 	 * Decrements the step.
 	 *
@@ -42,6 +55,7 @@ const baseActions = {
 			type: 'DECREMENT_STEP',
 		};
 	},
+
 	/**
 	 * Resets the step.
 	 *
@@ -59,6 +73,39 @@ const baseActions = {
 			payload: { user },
 		};
 	},
+
+	setError(code, message) {
+		return {
+			type: 'SET_ERROR',
+			payload: { code, message },
+		};
+	},
+
+	clearError(code) {
+		return {
+			type: 'CLEAR_ERROR',
+			payload: { code },
+		};
+	},
+
+	clearErrors() {
+		return {
+			type: 'CLEAR_ERRORS',
+		};
+	},
+
+	setData(property, data) {
+		return {
+			type: 'SET_DATA',
+			payload: { property, data },
+		};
+	},
+
+	resetForm() {
+		return {
+			type: 'RESET_FORM',
+		};
+	},
 };
 
 const baseReducer = (state, { type, payload }) => {
@@ -66,6 +113,11 @@ const baseReducer = (state, { type, payload }) => {
 		case 'SET_STEP': {
 			const { step } = payload;
 			return { ...state, step };
+		}
+
+		case 'SET_STEP_VALIDATION_FN': {
+			const { validationFn } = payload;
+			return { ...state, stepValidationFn: validationFn };
 		}
 
 		case 'INCREMENT_STEP': {
@@ -81,7 +133,33 @@ const baseReducer = (state, { type, payload }) => {
 		}
 
 		case 'SET_USER': {
-			return { ...state, user: payload.user };
+			const { user } = payload;
+			return { ...state, user: user || null };
+		}
+
+		case 'SET_ERROR': {
+			const { code, message } = payload;
+			const errors = state.errors.filter((error) => error.code !== code);
+			return { ...state, errors: [...errors, { code, message }] };
+		}
+
+		case 'CLEAR_ERROR': {
+			const { code } = payload;
+			const errors = state.errors.filter((error) => error.code !== code);
+			return { ...state, errors };
+		}
+
+		case 'CLEAR_ERRORS': {
+			return { ...state, errors: [] };
+		}
+
+		case 'SET_DATA': {
+			const { property, data } = payload;
+			return { ...state, data: { ...state.data, [property]: data } };
+		}
+
+		case 'RESET_FORM': {
+			return { ...baseInitialState };
 		}
 
 		default: {
@@ -91,18 +169,26 @@ const baseReducer = (state, { type, payload }) => {
 };
 
 const baseSelectors = {
-	/**
-	 * Retrieves the step from state.
-	 *
-	 * @param {Object} state State of the data store.
-	 * @return {number} Step.
-	 */
 	getCurrentStep(state) {
 		return state.step;
 	},
-
 	getUser(state) {
 		return state.user;
+	},
+	isUserEdit(state) {
+		return !!state.user;
+	},
+	getErrors(state) {
+		return state.errors;
+	},
+	getData(state, field) {
+		return state.data[field];
+	},
+	getState(state) {
+		return state;
+	},
+	getStepValidationFn(state) {
+		return state.stepValidationFn;
 	},
 };
 

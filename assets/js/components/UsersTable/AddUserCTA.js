@@ -27,7 +27,11 @@ export default function AddUserCTA() {
 	return (
 		<Fragment>
 			<Spacer marginY={5}>
-				<Button variant="primary" onClick={() => setContext('edit')}>
+				<Button
+					isPressed={false}
+					variant="primary"
+					onClick={() => setContext('edit')}
+				>
 					{__('Add New User', 'temporary-access')}
 				</Button>
 			</Spacer>

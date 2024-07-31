@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { AccessDetails } from './AccessDetails';
+import AccessDetails from './AccessDetails';
 import UserDetails from './UserDetails';
 
 const steps = [

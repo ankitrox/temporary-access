@@ -29,3 +29,12 @@ export const validateUserID = function ({ userId }) {
 	invariant(userId, `User ID is required.`);
 	invariant(typeof userId === 'number', `User ID must be a number.`);
 };
+
+export const isValidName = (name) =>
+	typeof name === 'string' &&
+	/^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i.test(name);
+
+export const isValidEmail = (email) => {
+	const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+	return emailRegex.test(email);
+};

@@ -24,14 +24,8 @@ import { Box, Stepper, Step, StepLabel } from '@mui/material';
 import { UI_STORE_NAME } from '../../datastores/constants';
 
 export default function EditForm() {
-	const {
-		clearErrors,
-		decrementStep,
-		incrementStep,
-		setContext,
-		setData,
-		resetForm,
-	} = useDispatch(UI_STORE_NAME);
+	const { clearErrors, decrementStep, incrementStep, setContext, resetForm } =
+		useDispatch(UI_STORE_NAME);
 
 	const currentStep = useSelect((select) =>
 		select(UI_STORE_NAME).getCurrentStep()
@@ -47,6 +41,10 @@ export default function EditForm() {
 
 	const stepValidationFn = useSelect((select) =>
 		select(UI_STORE_NAME).getStepValidationFn()
+	);
+
+	const getUserCrateData = useSelect((select) =>
+		select(UI_STORE_NAME).getData()
 	);
 
 	// If the current step is greater than the number of steps, return null.
@@ -72,7 +70,18 @@ export default function EditForm() {
 		}
 	};
 
-	const onSubmit = () => {};
+	const onBack = () => {
+		clearErrors();
+		decrementStep();
+	};
+
+	const onSubmit = () => {
+		const valid = stepValidationFn();
+		if (valid) {
+			clearErrors();
+			console.log(getUserCrateData);
+		}
+	};
 
 	const isLastStep = currentStep === steps.length - 1;
 	const hasPreviousStep = currentStep > 0;
@@ -124,10 +133,7 @@ export default function EditForm() {
 						</Spacer>
 						<Flex>
 							{hasPreviousStep && (
-								<Button
-									variant="secondary"
-									onClick={decrementStep}
-								>
+								<Button variant="secondary" onClick={onBack}>
 									{__('Back', 'temporary-access')}
 								</Button>
 							)}

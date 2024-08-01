@@ -12,7 +12,7 @@ import {
 	__experimentalSpacer as Spacer,
 	TextControl,
 } from '@wordpress/components';
-import { Fragment, useEffect } from '@wordpress/element';
+import { Fragment, useMemo, useEffect } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { isValidName, isValidEmail } from '../../../datastores/validations';
 
@@ -31,33 +31,23 @@ export default function UserDetails() {
 		select(UI_STORE_NAME).getData('surname')
 	);
 
-	const getFieldValue = (fieldName) => {
-		switch (fieldName) {
-			case 'email':
-				return email;
-			case 'name':
-				return name;
-			case 'surname':
-				return surname;
-			default:
-				return '';
-		}
-	};
-
-	const fields = {
-		email: {
-			validationFn: isValidEmail,
-			errorMessage: __('Invalid email', 'temporary-access'),
-		},
-		name: {
-			validationFn: isValidName,
-			errorMessage: __('Invalid first name', 'temporary-access'),
-		},
-		surname: {
-			validationFn: isValidName,
-			errorMessage: __('Invalid last name', 'temporary-access'),
-		},
-	};
+	const fields = useMemo(
+		() => ({
+			email: {
+				validationFn: isValidEmail,
+				errorMessage: __('Invalid email', 'temporary-access'),
+			},
+			name: {
+				validationFn: isValidName,
+				errorMessage: __('Invalid first name', 'temporary-access'),
+			},
+			surname: {
+				validationFn: isValidName,
+				errorMessage: __('Invalid last name', 'temporary-access'),
+			},
+		}),
+		[]
+	);
 
 	const onChangeField = (field) => {
 		return (value) => {
@@ -72,6 +62,19 @@ export default function UserDetails() {
 	};
 
 	useEffect(() => {
+		const getFieldValue = (fieldName) => {
+			switch (fieldName) {
+				case 'email':
+					return email;
+				case 'name':
+					return name;
+				case 'surname':
+					return surname;
+				default:
+					return '';
+			}
+		};
+
 		const validateFields = () => {
 			let isValid = true;
 
@@ -89,15 +92,7 @@ export default function UserDetails() {
 		};
 
 		setStepValidationFn(validateFields);
-	}, [
-		email,
-		fields,
-		getFieldValue,
-		name,
-		setError,
-		setStepValidationFn,
-		surname,
-	]);
+	}, [email, fields, name, setError, setStepValidationFn, surname]);
 
 	return (
 		<Fragment>
@@ -106,11 +101,7 @@ export default function UserDetails() {
 					label={__('Email', 'temporary-access')}
 					type={'email'}
 					autoComplete="off"
-					onChange={onChangeField(
-						'email',
-						isValidEmail,
-						__('Invalid email', 'temporary-access')
-					)}
+					onChange={onChangeField('email')}
 					value={email ?? ''}
 				/>
 			</BaseControl>
@@ -122,11 +113,7 @@ export default function UserDetails() {
 					label={__('First Name', 'temporary-access')}
 					type={'text'}
 					autoComplete="off"
-					onChange={onChangeField(
-						'name',
-						isValidName,
-						__('Invalid first name', 'temporary-access')
-					)}
+					onChange={onChangeField('name')}
 					value={name ?? ''}
 				/>
 			</BaseControl>
@@ -138,11 +125,7 @@ export default function UserDetails() {
 					label={__('Last Name', 'temporary-access')}
 					type={'text'}
 					autoComplete="off"
-					onChange={onChangeField(
-						'surname',
-						isValidName,
-						__('Invalid last name', 'temporary-access')
-					)}
+					onChange={onChangeField('surname')}
 					value={surname ?? ''}
 				/>
 			</BaseControl>

@@ -13,12 +13,13 @@ import {
 	SelectControl,
 	TextControl,
 } from '@wordpress/components';
-import { Fragment, useCallback, useEffect, useState } from '@wordpress/element';
+import { Fragment, useEffect, useMemo } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies.
  */
+import { isValidRole, isValidDate } from '../../../datastores/validations';
 import { UI_STORE_NAME } from '../../../datastores/constants';
 
 // Build the options for the select control.
@@ -30,61 +31,85 @@ if (Object.keys(tempAccess.roles).length) {
 }
 
 export default function AccessDetails() {
-	const { setData, setError } = useDispatch(UI_STORE_NAME);
-	const availableRoles = Object.keys(tempAccess.roles);
+	const { clearError, setData, setError, setStepValidationFn } =
+		useDispatch(UI_STORE_NAME);
 
-	const onDateChange = useCallback(
-		(field, value) => {
-			try {
-				if (!value || value === '') {
-					throw new Error(
-						__(
-							'Please select start date and end date.',
-							'temporary-access'
-						)
-					);
-				}
-
-				const timestamp = new Date(value).getTime();
-				setData(field, timestamp);
-			} catch (error) {
-				setError(
-					`invalid_${field}`,
-					error.message || __('Invalid date', 'temporary-access')
-				);
-			}
-		},
-		[setData, setError]
+	const role = useSelect((select) => select(UI_STORE_NAME).getData('role'));
+	const startDate = useSelect((select) =>
+		select(UI_STORE_NAME).getData('startDate')
+	);
+	const endDate = useSelect((select) =>
+		select(UI_STORE_NAME).getData('endDate')
 	);
 
-	const onRoleChange = useCallback(
-		(field, value) => {
-			try {
-				if (availableRoles.includes(value)) {
-					setData(field, value);
-					return;
-				}
-
-				throw new Error(__('Invalid role', 'temporary-access'));
-			} catch (error) {
-				setError(
-					`invalid_${field}`,
-					error.message || __('Invalid role', 'temporary-access')
-				);
-			}
-		},
-		[setData, setError]
+	const fields = useMemo(
+		() => ({
+			role: {
+				validationFn: isValidRole,
+				errorMessage: __('Invalid role', 'temporary-access'),
+			},
+			startDate: {
+				validationFn: isValidDate,
+				errorMessage: __('Invalid date', 'temporary-access'),
+			},
+			endDate: {
+				validationFn: isValidDate,
+				errorMessage: __('Invalid date', 'temporary-access'),
+			},
+		}),
+		[]
 	);
+
+	const onChangeField = (field) => {
+		return (value) => {
+			const fieldValidationFn = fields[field].validationFn;
+
+			if (fieldValidationFn(value)) {
+				clearError(`invalid_${field}`);
+			}
+
+			setData(field, value);
+		};
+	};
+
+	useEffect(() => {
+		const getFieldValue = (fieldName) => {
+			switch (fieldName) {
+				case 'role':
+					return role;
+				case 'startDate':
+					return startDate;
+				case 'endDate':
+					return endDate;
+			}
+		};
+
+		const validateFields = () => {
+			let isValid = true;
+			for (const field in fields) {
+				const fieldValidationFn = fields[field].validationFn;
+				const fieldValue = getFieldValue(field);
+
+				if (!fieldValidationFn(fieldValue)) {
+					setError(`invalid_${field}`, fields[field].errorMessage);
+					isValid = false;
+				}
+			}
+
+			return isValid;
+		};
+
+		setStepValidationFn(validateFields);
+	}, [endDate, fields, role, setError, setStepValidationFn, startDate]);
 
 	return (
 		<Fragment>
 			<BaseControl>
 				<SelectControl
 					label={__('Role', 'temporary-access')}
-					onChange={(value) => {
-						onRoleChange('role', value);
-					}}
+					onChange={onChangeField('role')}
 					options={roles}
+					value={role}
 				/>
 			</BaseControl>
 
@@ -95,10 +120,17 @@ export default function AccessDetails() {
 					label={__('Start Date and Time', 'temporary-access')}
 					type={'datetime-local'}
 					autoComplete="off"
-					onChange={(value) => {
-						onDateChange('startDate', value);
-					}}
+					onChange={onChangeField('startDate')}
+					value={startDate ?? ''}
 				/>
+				<div>
+					<small>
+						{__(
+							"Corresponds to site's timezone",
+							'temporary-access'
+						)}
+					</small>
+				</div>
 			</BaseControl>
 
 			<Spacer marginY={5} />
@@ -108,10 +140,17 @@ export default function AccessDetails() {
 					label={__('End Date and Time', 'temporary-access')}
 					type={'datetime-local'}
 					autoComplete="off"
-					onChange={(value) => {
-						onDateChange('endDate', value);
-					}}
+					onChange={onChangeField('endDate')}
+					value={endDate ?? ''}
 				/>
+				<div>
+					<small>
+						{__(
+							"Corresponds to site's timezone",
+							'temporary-access'
+						)}
+					</small>
+				</div>
 			</BaseControl>
 
 			<Spacer marginY={5} />

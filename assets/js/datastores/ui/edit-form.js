@@ -182,6 +182,9 @@ const baseSelectors = {
 		return state.errors;
 	},
 	getData(state, field) {
+		if (!field) {
+			return state.data;
+		}
 		return state.data[field];
 	},
 	getState(state) {

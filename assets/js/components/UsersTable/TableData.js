@@ -62,6 +62,7 @@ export function getDataRows(users) {
 			username: user.user_login,
 			email: user.user_email,
 			last_access: user.last_login,
+			key: user.ID,
 		};
 	});
 }

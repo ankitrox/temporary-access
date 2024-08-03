@@ -21,11 +21,12 @@ import { useDispatch, useSelect } from '@wordpress/data';
  */
 import steps from './FormSteps';
 import { Box, Stepper, Step, StepLabel } from '@mui/material';
-import { UI_STORE_NAME } from '../../datastores/constants';
+import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function EditForm() {
 	const { clearErrors, decrementStep, incrementStep, setContext, resetForm } =
 		useDispatch(UI_STORE_NAME);
+	const { createUser, setNotice } = useDispatch(STORE_NAME);
 
 	const currentStep = useSelect((select) =>
 		select(UI_STORE_NAME).getCurrentStep()
@@ -43,9 +44,7 @@ export default function EditForm() {
 		select(UI_STORE_NAME).getStepValidationFn()
 	);
 
-	const getUserCrateData = useSelect((select) =>
-		select(UI_STORE_NAME).getData()
-	);
+	const formData = useSelect((select) => select(UI_STORE_NAME).getData());
 
 	// If the current step is greater than the number of steps, return null.
 	if (currentStep > steps.length) {
@@ -75,11 +74,33 @@ export default function EditForm() {
 		decrementStep();
 	};
 
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		const valid = stepValidationFn();
 		if (valid) {
 			clearErrors();
-			console.log(getUserCrateData);
+
+			const userData = {
+				user_email: formData.email,
+				first_name: formData.name,
+				last_name: formData.surname,
+				role: formData.role,
+				start_date: formData.startDate,
+				end_date: formData.endDate,
+			};
+
+			const { error } = await createUser(userData);
+
+			if (!error) {
+				setNotice({
+					code: 'user_created',
+					message: isUserEdit
+						? __('User updated successfully', 'temporary-access')
+						: __('User created successfully', 'temporary-access'),
+					noticeType: 'success',
+				});
+
+				onCloseModal();
+			}
 		}
 	};
 

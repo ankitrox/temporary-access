@@ -14,20 +14,24 @@ import { Fragment } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { UI_STORE_NAME } from '../datastores/constants';
+import { UI_STORE_NAME } from '../../datastores/constants';
 
 /**
  * Add New User Component.
  *
  * @return {Object} AddNewUser component.
  */
-export default function AddNewUser() {
+export default function AddUserCTA() {
 	const { setContext } = useDispatch(UI_STORE_NAME);
 
 	return (
 		<Fragment>
 			<Spacer marginY={5}>
-				<Button variant="primary" onClick={() => setContext('edit')}>
+				<Button
+					isPressed={false}
+					variant="primary"
+					onClick={() => setContext('edit')}
+				>
 					{__('Add New User', 'temporary-access')}
 				</Button>
 			</Spacer>

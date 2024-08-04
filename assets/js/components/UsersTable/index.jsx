@@ -3,6 +3,11 @@
  */
 
 /**
+ * External dependencies.
+ */
+import { DataGrid } from '@mui/x-data-grid';
+
+/**
  * Wordpress dependencies.
  */
 import { useSelect } from '@wordpress/data';
@@ -11,8 +16,8 @@ import { useState } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
+import ProgressBar from '../ProgressBar';
 import { DataColumns, getDataRows } from './TableData';
-import { DataGrid } from '@mui/x-data-grid';
 import { STORE_NAME } from '../../datastores/constants';
 
 export default function UsersTable() {
@@ -31,8 +36,21 @@ export default function UsersTable() {
 		[]
 	);
 
+	const isLoaded = useSelect(
+		(select) =>
+			select(STORE_NAME).hasFinishedResolution('getUsers', [
+				paginationModel,
+			]),
+		[paginationModel]
+	);
+
+	// Display a progress bar while the data is being loaded.
+	if (!isLoaded) {
+		return <ProgressBar height={200} indeterminate />;
+	}
+
 	// Return early if there are no users.
-	if (!users || !Array.isArray(users) || users.length === 0) {
+	if (!Array.isArray(users) || users.length === 0) {
 		return null;
 	}
 

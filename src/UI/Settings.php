@@ -44,6 +44,8 @@ class Settings {
 			return;
 		}
 
+		$assets = require trailingslashit( plugin()->path ) . 'assets/build/api.asset.php';
+
 		wp_register_script(
 			'wp-temp-access-api',
 			trailingslashit( plugin()->url ) . 'assets/build/api.js',
@@ -72,7 +74,7 @@ class Settings {
 				'wp-url',
 				'wp-temp-access-api',
 			),
-			filemtime( trailingslashit( plugin()->path ) . 'assets/build/temp-access.js', ),
+			$assets['version'],
 			true
 		);
 
@@ -93,12 +95,6 @@ class Settings {
 		wp_enqueue_script( 'wp-temp-access-api' );
 		wp_enqueue_script( 'wp-temp-access' );
 		wp_enqueue_style( 'wp-components' );
-		wp_enqueue_style(
-			'temp-access-css',
-			trailingslashit( plugin()->url ) . 'assets/build/temp-access.css',
-			array(),
-			filemtime( trailingslashit( plugin()->path ) . 'assets/build/temp-access.css' ),
-		);
 	}
 
 	/**

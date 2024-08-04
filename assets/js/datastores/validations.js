@@ -29,3 +29,22 @@ export const validateUserID = function ({ userId }) {
 	invariant(userId, `User ID is required.`);
 	invariant(typeof userId === 'number', `User ID must be a number.`);
 };
+
+export const isValidName = (name) =>
+	typeof name === 'string' &&
+	/^(?=.{1,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i.test(name);
+
+export const isValidEmail = (email) => {
+	const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+	return emailRegex.test(email);
+};
+
+export const isValidRole = (role) => {
+	const availableRoles = Object.keys(tempAccess.roles);
+	return typeof role === 'string' && availableRoles.includes(role);
+};
+
+export const isValidDate = (date) => {
+	const timestamp = new Date(date).getTime();
+	return !isNaN(timestamp);
+};

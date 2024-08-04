@@ -46,14 +46,21 @@ const fetchGetUsers = createFetchStore({
 
 const fetchCreateUser = createFetchStore({
 	baseName: 'createUser',
-	controlCallback: (userData) => API.set(userData),
-	reducerCallback: (state, user) => {
-		return { ...state, users: [...state.users, user] };
+	controlCallback: (userData) => {
+		const path = userData.ID ? userData.ID.toString() : '';
+		return API.set(userData, { path });
 	},
+	reducerCallback: (state) => state,
 	validateParams: validateUserCreationParams,
 	argsToParams: (data) => {
 		return {
+			ID: data?.ID,
 			user_email: data?.user_email,
+			first_name: data?.first_name,
+			last_name: data?.last_name,
+			role: data?.role,
+			start_date: data?.start_date,
+			end_date: data?.end_date,
 		};
 	},
 });
@@ -64,10 +71,7 @@ const fetchDeleteUser = createFetchStore({
 		const options = { method: 'DELETE', path: userData.userId };
 		return API.remove({}, options);
 	},
-	reducerCallback: (state, userID) => {
-		const users = state.users.filter((u) => u.ID !== userID);
-		return { ...state, users };
-	},
+	reducerCallback: (state) => state,
 	validateParams: validateUserID,
 	argsToParams: (params) => {
 		return { userId: params?.userId };
@@ -90,7 +94,9 @@ const baseActions = {
 	 * @return {Object} User object.
 	 */
 	*createUser(userData) {
-		yield fetchCreateUser.actions.fetchCreateUser(userData);
+		const { response, error } =
+			yield fetchCreateUser.actions.fetchCreateUser(userData);
+		return { response, error };
 	},
 
 	/**

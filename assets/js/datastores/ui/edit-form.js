@@ -134,7 +134,37 @@ const baseReducer = (state, { type, payload }) => {
 
 		case 'SET_USER': {
 			const { user } = payload;
-			return { ...state, user: user || null };
+			const {
+				// eslint-disable-next-line camelcase
+				first_name,
+				// eslint-disable-next-line camelcase
+				last_name,
+				// eslint-disable-next-line camelcase
+				user_email,
+				role,
+				// eslint-disable-next-line camelcase
+				start_date,
+				// eslint-disable-next-line camelcase
+				end_date,
+				ID,
+			} = user || {};
+
+			const data = {
+				// eslint-disable-next-line camelcase
+				name: first_name,
+				// eslint-disable-next-line camelcase
+				surname: last_name,
+				// eslint-disable-next-line camelcase
+				email: user_email,
+				role,
+				// eslint-disable-next-line camelcase
+				startDate: start_date,
+				// eslint-disable-next-line camelcase
+				endDate: end_date,
+				ID,
+			};
+
+			return { ...state, data, user: user || null };
 		}
 
 		case 'SET_ERROR': {
@@ -159,7 +189,7 @@ const baseReducer = (state, { type, payload }) => {
 		}
 
 		case 'RESET_FORM': {
-			return { ...baseInitialState };
+			return { ...state, ...baseInitialState };
 		}
 
 		default: {

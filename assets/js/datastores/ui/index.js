@@ -16,9 +16,14 @@ import { combineStores } from '../../data/utils';
 /**
  * Internal dependencies
  */
-import context from './context';
-import EditForm from './edit-form';
+import contextStore from './context';
+import editFormStore from './edit-form';
+import deleteConfirmationStore from './delete-confirm';
 
-const store = combineStores(context, EditForm);
+const store = combineStores(
+	contextStore,
+	editFormStore,
+	deleteConfirmationStore
+);
 
 export default createReduxStore(UI_STORE_NAME, store);

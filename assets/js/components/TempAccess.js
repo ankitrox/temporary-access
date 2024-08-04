@@ -14,6 +14,7 @@ import AddUserCTA from './UsersTable/AddUserCTA';
 import EditForm from './EditForm';
 import Notices from './Notices';
 import UsersTable from './UsersTable';
+import DeleteConfirmation from './DeleteConfirmation';
 
 export default function TempAccess() {
 	return (
@@ -23,6 +24,7 @@ export default function TempAccess() {
 				<AddUserCTA />
 				<UsersTable />
 				<EditForm />
+				<DeleteConfirmation />
 			</Fragment>
 		</div>
 	);

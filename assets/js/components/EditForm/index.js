@@ -38,7 +38,6 @@ export default function EditForm() {
 
 	const errors = useSelect((select) => select(UI_STORE_NAME).getErrors());
 	const context = useSelect((select) => select(UI_STORE_NAME).getContext());
-	const isOpen = context === 'edit';
 
 	const stepValidationFn = useSelect((select) =>
 		select(UI_STORE_NAME).getStepValidationFn()
@@ -46,12 +45,18 @@ export default function EditForm() {
 
 	const formData = useSelect((select) => select(UI_STORE_NAME).getData());
 
+	console.log('current context', context);
+
+	if (context !== 'edit') {
+		return null;
+	}
+
 	// If the current step is greater than the number of steps, return null.
 	if (currentStep > steps.length) {
 		return null;
 	}
 
-	const StepComponent = steps[currentStep].component;
+	const StepComponent = steps[currentStep]?.component;
 	const hasErrors = Object.keys(errors).length > 0;
 
 	const onCloseModal = () => {
@@ -86,6 +91,7 @@ export default function EditForm() {
 				role: formData.role,
 				start_date: formData.startDate,
 				end_date: formData.endDate,
+				ID: formData?.ID,
 			};
 
 			const { error } = await createUser(userData);
@@ -111,67 +117,61 @@ export default function EditForm() {
 		: __('Create User', 'temporary-access');
 
 	return (
-		<>
-			{isOpen && (
-				<Modal
-					className="tempaccess-modal--edit-form"
-					shouldCloseOnClickOutside={false}
-					isDismissible
-					onRequestClose={onCloseModal}
-				>
-					<Box sx={{ width: '100%' }}>
-						<Stepper activeStep={0} alternativeLabel>
-							{steps.map(({ label }, index) => {
-								const stepProps = {
-									active: index === currentStep,
-								};
-								const labelProps = {};
-								return (
-									<Step key={label} {...stepProps}>
-										<StepLabel {...labelProps}>
-											{label}
-										</StepLabel>
-									</Step>
-								);
-							})}
-						</Stepper>
+		<Modal
+			className="tempaccess-modal--edit-form"
+			shouldCloseOnClickOutside={false}
+			isDismissible
+			onRequestClose={onCloseModal}
+		>
+			<Box sx={{ width: '100%' }}>
+				<Stepper activeStep={0} alternativeLabel>
+					{steps.map(({ label }, index) => {
+						const stepProps = {
+							active: index === currentStep,
+						};
+						const labelProps = {};
+						return (
+							<Step key={label} {...stepProps}>
+								<StepLabel {...labelProps}>{label}</StepLabel>
+							</Step>
+						);
+					})}
+				</Stepper>
 
-						{hasErrors &&
-							errors.map(({ code, message }) => (
-								<Spacer key={code} marginY={3}>
-									<Notice
-										key={code}
-										status="error"
-										isDismissible={false}
-									>
-										{message}
-									</Notice>
-								</Spacer>
-							))}
-
-						<Spacer marginY={6}>
-							<StepComponent />
+				{hasErrors &&
+					errors.map(({ code, message }) => (
+						<Spacer key={code} marginY={3}>
+							<Notice
+								key={code}
+								status="error"
+								isDismissible={false}
+							>
+								{message}
+							</Notice>
 						</Spacer>
-						<Flex>
-							{hasPreviousStep && (
-								<Button variant="secondary" onClick={onBack}>
-									{__('Back', 'temporary-access')}
-								</Button>
-							)}
-							{!isLastStep && (
-								<Button variant="secondary" onClick={onNext}>
-									{__('Next', 'temporary-access')}
-								</Button>
-							)}
-							{isLastStep && (
-								<Button variant="primary" onClick={onSubmit}>
-									{CTALabel}
-								</Button>
-							)}
-						</Flex>
-					</Box>
-				</Modal>
-			)}
-		</>
+					))}
+
+				<Spacer marginY={6}>
+					<StepComponent />
+				</Spacer>
+				<Flex>
+					{hasPreviousStep && (
+						<Button variant="secondary" onClick={onBack}>
+							{__('Back', 'temporary-access')}
+						</Button>
+					)}
+					{!isLastStep && (
+						<Button variant="secondary" onClick={onNext}>
+							{__('Next', 'temporary-access')}
+						</Button>
+					)}
+					{isLastStep && (
+						<Button variant="primary" onClick={onSubmit}>
+							{CTALabel}
+						</Button>
+					)}
+				</Flex>
+			</Box>
+		</Modal>
 	);
 }

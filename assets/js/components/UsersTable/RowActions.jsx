@@ -12,10 +12,12 @@ import { useDispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../datastores/constants';
+import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function RowActions({ user }) {
-	const { setContext, setNotice } = useDispatch(STORE_NAME);
+	const { setContext, setUser, setUserForDeletion } =
+		useDispatch(UI_STORE_NAME);
+	const { setNotice } = useDispatch(STORE_NAME);
 
 	// Copy the login link to the clipboard and show a notice.
 	const onCopyLink = async (userData) => {
@@ -29,19 +31,29 @@ export default function RowActions({ user }) {
 		});
 	};
 
+	const onEdit = () => {
+		setContext('edit');
+		setUser(user);
+	};
+
+	const onDelete = () => {
+		setContext('delete');
+		setUserForDeletion(user);
+	};
+
 	return (
 		<div className="tempuser-actions">
 			<Button
 				icon="edit"
 				title={__('Edit', 'temporary-access')}
 				isPressed={false}
-				onClick={() => setContext('edit')}
+				onClick={onEdit}
 			/>
 			<Button
 				icon="trash"
 				title={__('Delete', 'temporary-access')}
 				isPressed={false}
-				onClick={() => setContext('delete')}
+				onClick={onDelete}
 			/>
 			<Button
 				icon="email"

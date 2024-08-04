@@ -46,11 +46,15 @@ const fetchGetUsers = createFetchStore({
 
 const fetchCreateUser = createFetchStore({
 	baseName: 'createUser',
-	controlCallback: (userData) => API.set(userData),
+	controlCallback: (userData) => {
+		const path = userData.ID ? userData.ID.toString() : '';
+		return API.set(userData, { path });
+	},
 	reducerCallback: (state) => state,
 	validateParams: validateUserCreationParams,
 	argsToParams: (data) => {
 		return {
+			ID: data?.ID,
 			user_email: data?.user_email,
 			first_name: data?.first_name,
 			last_name: data?.last_name,

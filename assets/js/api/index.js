@@ -59,10 +59,11 @@ export const get = (data = {}) => {
  * @return {Promise} Response from the endpoint.
  */
 export const set = async (data, options = {}) => {
-	const { method = 'POST', queryParams, signal } = options;
+	const { method = 'POST', queryParams, path, signal } = options;
 	const response = await tempAccessRequest({
 		data,
 		method,
+		path,
 		queryParams,
 		signal,
 	});

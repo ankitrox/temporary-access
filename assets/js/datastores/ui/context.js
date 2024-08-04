@@ -2,7 +2,10 @@
  * Context data store.
  */
 
+import invariant from 'invariant';
 import { combineStores } from '../../data/utils';
+
+const validContexts = ['default', 'delete', 'edit', 'create'];
 
 const baseInitialState = {
 	context: 'default',
@@ -35,6 +38,11 @@ const baseReducer = (state, { type, payload }) => {
 	switch (type) {
 		case 'SET_CONTEXT': {
 			const { context } = payload;
+			invariant(
+				validContexts.includes(context),
+				'Invalid context: %s',
+				context
+			);
 			return { ...state, context };
 		}
 

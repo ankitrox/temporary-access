@@ -45,8 +45,6 @@ export default function EditForm() {
 
 	const formData = useSelect((select) => select(UI_STORE_NAME).getData());
 
-	console.log('current context', context);
-
 	if (context !== 'edit') {
 		return null;
 	}

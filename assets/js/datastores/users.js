@@ -104,7 +104,10 @@ const baseActions = {
 	 * @param {number} userId User ID to delete.
 	 */
 	*deleteUser(userId) {
-		yield fetchDeleteUser.actions.fetchDeleteUser({ userId });
+		const { response, error } =
+			yield fetchDeleteUser.actions.fetchDeleteUser({ userId });
+
+		return { response, error };
 	},
 };
 

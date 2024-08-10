@@ -20,11 +20,15 @@ import { useDispatch, useSelect } from '@wordpress/data';
 import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function DeleteConfirmation() {
+	const dispatch = useDispatch();
 	const { resetDeleteConfirmation, setContext } = useDispatch(UI_STORE_NAME);
-	const { deleteUser, setNotice } = useDispatch(STORE_NAME);
+	const { getUsers, deleteUser, setNotice } = useDispatch(STORE_NAME);
 	const user = useSelect((select) => select(UI_STORE_NAME).getUserToDelete());
 	const context = useSelect((select) => select(UI_STORE_NAME).getContext());
 	const isOpen = context === 'delete';
+	const getPageModal = useSelect((select) =>
+		select(UI_STORE_NAME).getPageModal()
+	);
 
 	const onCloseModal = () => {
 		resetDeleteConfirmation();
@@ -34,6 +38,10 @@ export default function DeleteConfirmation() {
 	const onDelete = async () => {
 		const { error } = await deleteUser(user?.ID);
 		if (!error) {
+			dispatch(STORE_NAME).invalidateResolution('getUsers', [
+				getPageModal,
+			]);
+
 			setNotice({
 				code: 'user_deleted',
 				message: __('User deleted successfully', 'temporary-access'),
@@ -41,6 +49,7 @@ export default function DeleteConfirmation() {
 			});
 
 			onCloseModal();
+			getUsers(getPageModal);
 		}
 	};
 

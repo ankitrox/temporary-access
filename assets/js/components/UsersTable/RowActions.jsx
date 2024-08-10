@@ -56,12 +56,6 @@ export default function RowActions({ user }) {
 				onClick={onDelete}
 			/>
 			<Button
-				icon="email"
-				title={__('Email login link', 'temporary-access')}
-				isPressed={false}
-				onClick={() => {}}
-			/>
-			<Button
 				icon="admin-links"
 				title={__('Copy link', 'temporary-access')}
 				isPressed={false}

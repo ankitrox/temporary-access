@@ -116,7 +116,7 @@ export default function EditForm() {
 
 	return (
 		<Modal
-			className="tempaccess-modal--edit-form"
+			className="tempaccess-modal-edit-form"
 			shouldCloseOnClickOutside={false}
 			isDismissible
 			onRequestClose={onCloseModal}

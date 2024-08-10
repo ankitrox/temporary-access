@@ -49,8 +49,9 @@ export default function DeleteConfirmation() {
 			{isOpen && (
 				<Modal
 					__experimentalHideHeader={true}
+					className="tempaccess-modal-delete-form"
 					onRequestClose={onCloseModal}
-					className="tempuser-delete-modal"
+					shouldCloseOnClickOutside={false}
 				>
 					<p>
 						{__(

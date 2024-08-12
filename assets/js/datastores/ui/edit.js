@@ -147,6 +147,10 @@ const baseReducer = (state, { type, payload }) => {
 				// eslint-disable-next-line camelcase
 				end_date,
 				ID,
+				// eslint-disable-next-line camelcase
+				start_date_local,
+				// eslint-disable-next-line camelcase
+				end_date_local,
 			} = user || {};
 
 			const data = {
@@ -162,6 +166,10 @@ const baseReducer = (state, { type, payload }) => {
 				// eslint-disable-next-line camelcase
 				endDate: end_date,
 				ID,
+				// eslint-disable-next-line camelcase
+				startDateLocal: start_date_local,
+				// eslint-disable-next-line camelcase
+				endDateLocal: end_date_local,
 			};
 
 			return { ...state, data, user: user || null };

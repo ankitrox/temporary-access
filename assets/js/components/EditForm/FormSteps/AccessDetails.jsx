@@ -11,7 +11,6 @@ import {
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalSpacer as Spacer,
 	SelectControl,
-	TextControl,
 } from '@wordpress/components';
 import { Fragment, useEffect, useMemo } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
@@ -21,6 +20,7 @@ import { useDispatch, useSelect } from '@wordpress/data';
  */
 import { isValidRole, isValidDate } from '../../../datastores/validations';
 import { UI_STORE_NAME } from '../../../datastores/constants';
+import Datepicker from '../../Datepicker';
 
 // Build the options for the select control.
 const roles = [{ label: __('Select a Role', 'temporary-access'), value: '' }];
@@ -67,6 +67,9 @@ export default function AccessDetails() {
 			if (fieldValidationFn(value)) {
 				clearError(`invalid_${field}`);
 			}
+
+			console.log('field', field);
+			console.log('value', value);
 
 			setData(field, value);
 		};
@@ -116,41 +119,21 @@ export default function AccessDetails() {
 			<Spacer marginY={5} />
 
 			<BaseControl>
-				<TextControl
-					label={__('Start Date and Time', 'temporary-access')}
-					type={'datetime-local'}
-					autoComplete="off"
+				<Datepicker
+					label={__('Start Date', 'temporary-access')}
+					dateValue={startDate}
 					onChange={onChangeField('startDate')}
-					value={startDate ?? ''}
 				/>
-				<div>
-					<small>
-						{__(
-							"Corresponds to site's timezone",
-							'temporary-access'
-						)}
-					</small>
-				</div>
 			</BaseControl>
 
 			<Spacer marginY={5} />
 
 			<BaseControl>
-				<TextControl
-					label={__('End Date and Time', 'temporary-access')}
-					type={'datetime-local'}
-					autoComplete="off"
+				<Datepicker
+					label={__('End Date', 'temporary-access')}
+					dateValue={endDate}
 					onChange={onChangeField('endDate')}
-					value={endDate ?? ''}
 				/>
-				<div>
-					<small>
-						{__(
-							"Corresponds to site's timezone",
-							'temporary-access'
-						)}
-					</small>
-				</div>
 			</BaseControl>
 
 			<Spacer marginY={5} />

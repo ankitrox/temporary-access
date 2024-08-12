@@ -20,7 +20,6 @@ use Ankit\TemporaryAccess\Utils\Helper;
  */
 class Authenticator {
 
-
 	/**
 	 * User manager instance.
 	 *

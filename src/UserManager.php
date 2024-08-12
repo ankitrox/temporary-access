@@ -59,8 +59,8 @@ class UserManager implements UserManagement {
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
 					'user_pass'  => wp_generate_password( 16 ),
 					'user_login' => 'user_' . time(),
-					'start_date' => strtotime( 'now' ),
-					'end_date'   => strtotime( '+1 day' ),
+					'start_date' => current_time( 'timestamp', true ),
+					'end_date'   => current_time( 'timestamp', true ), + DAY_IN_SECONDS, // By default valid for 1 day.
 					'redirect'   => admin_url(),
 				)
 			);
@@ -81,7 +81,7 @@ class UserManager implements UserManagement {
 			 *
 			 * @since 1.0.0
 			 */
-			do_action( 'tempaccess.user_created', $user, $args );
+			do_action( 'tempaccess.user_created', $user, $user_modal );
 
 			return ( new APIUser( $user->ID ) )->get_modal();
 
@@ -102,15 +102,15 @@ class UserManager implements UserManagement {
 	 * @return WP_User|array
 	 */
 	public function read( int $uid = null, array $args = array() ) {
-		$response = [
-			'users' => [],
+		$response   = array(
+			'users' => array(),
 			'total' => 0,
-		];
-		$page         = $args['page'] ?? 1;
-		$orderby      = $args['orderby'] ?? 'user_registered';
-		$order        = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
-		$number       = $args['per_page'] ?? apply_filters( 'tempaccess.read_users', 10 );
-		$users_args   = array(
+		);
+		$page       = $args['page'] ?? 1;
+		$orderby    = $args['orderby'] ?? 'user_registered';
+		$order      = ( 'ASC' === $args['order'] ) ? 'ASC' : 'DESC';
+		$number     = $args['per_page'] ?? apply_filters( 'tempaccess.read_users', 10 );
+		$users_args = array(
 			'meta_query' => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 				array(
 					'key'  => self::EXPIRATION_KEY,
@@ -119,11 +119,11 @@ class UserManager implements UserManagement {
 			),
 		);
 
-		$users_args['number']  = $number;
-		$users_args['paged']   = $page;
-		$users_args['orderby'] = $orderby;
-		$users_args['order']   = $order;
-		$users_args['count_total']   = true;
+		$users_args['number']      = $number;
+		$users_args['paged']       = $page;
+		$users_args['orderby']     = $orderby;
+		$users_args['order']       = $order;
+		$users_args['count_total'] = true;
 
 		if ( $uid ) {
 			$users_args['include'] = array( $uid );
@@ -178,10 +178,10 @@ class UserManager implements UserManagement {
 				)
 			);
 
-			$user_modal = new User( $args, 'update' );
-			$user_modal = get_object_vars( $user_modal );
-			unset( $user_modal['setters'] );
-			$user = wp_update_user( $user_modal );
+			$user_modal       = new User( $args, 'update' );
+			$user_update_args = get_object_vars( $user_modal );
+			unset( $user_update_args['setters'] );
+			$user = wp_update_user( $user_update_args );
 
 			if ( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
@@ -196,7 +196,7 @@ class UserManager implements UserManagement {
 			 *
 			 * @since 1.0.0
 			 */
-			do_action( 'tempaccess.user_updated', $user, $args );
+			do_action( 'tempaccess.user_updated', $user, $user_modal );
 
 			return ( new APIUser( $user->ID ) )->get_modal();
 
@@ -258,7 +258,17 @@ class UserManager implements UserManagement {
 			 */
 			$user = array_pop( $users );
 
-			return $user->ID;
+			$user_id = $user->ID;
+
+			// Check if user is expired.
+			$end_time = get_user_meta( $user_id, self::EXPIRATION_KEY, true );
+			$expired  = ( $end_time < current_time( 'timestamp' ) );
+
+			if ( $expired ) {
+				return 0;
+			}
+
+			return $user_id;
 		}
 
 		return 0;
@@ -268,31 +278,29 @@ class UserManager implements UserManagement {
 	 * Associate meta information to newly created temporary user.
 	 *
 	 * @param WP_User $user User object.
-	 * @param array   $args User arguments.
+	 * @param User    $user_modal User modal.
 	 *
 	 * @return void
 	 */
-	public function associate_meta( WP_User $user, array $args ): void {
+	public function associate_meta( WP_User $user, User $user_modal ): void {
 		// Token would only be generated during user creation.
 		if ( 'tempaccess.user_created' === current_action() ) {
-			// Start date and end date will always be present during user creation.
-			$start_date = $args['start_date'];
-			$end_date   = $args['end_date'];
-			$token      = $user->ID . time() . uniqid( '', true );
-			$token      = md5( $token );
+			$token = md5( $user->ID . time() . uniqid( '', true ) );
 			update_user_meta( $user->ID, self::TOKEN_KEY, $token );
-			update_user_meta( $user->ID, self::START_DATE_KEY, $start_date );
-			update_user_meta( $user->ID, self::EXPIRATION_KEY, $end_date );
+			update_user_meta( $user->ID, self::START_DATE_KEY, $user_modal->gmt_timestamp_start );
+
+			// Save the expiration time in local timezone.
+			update_user_meta( $user->ID, self::EXPIRATION_KEY, $user_modal->gmt_timestamp_end );
 		}
 
 		// Update start date and end date during user update only if present.
 		if ( 'tempaccess.user_updated' === current_action() ) {
-			if ( ! empty( $args['start_date'] ) ) {
-				update_user_meta( $user->ID, self::START_DATE_KEY, strtotime( $args['start_date'] ) );
+			if ( ! empty( $user_modal->gmt_timestamp_start ) ) {
+				update_user_meta( $user->ID, self::START_DATE_KEY, $user_modal->gmt_timestamp_start );
 			}
 
-			if ( ! empty( $args['end_date'] ) ) {
-				update_user_meta( $user->ID, self::EXPIRATION_KEY, strtotime( $args['end_date'] ) );
+			if ( ! empty( $user_modal->gmt_timestamp_end ) ) {
+				update_user_meta( $user->ID, self::EXPIRATION_KEY, $user_modal->gmt_timestamp_end );
 			}
 		}
 	}

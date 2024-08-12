@@ -59,8 +59,9 @@ class UserManager implements UserManagement {
 					'role'       => is_multisite() ? get_blog_option( get_current_blog_id(), 'default_role', 'subscriber' ) : get_option( 'default_role', 'subscriber' ),
 					'user_pass'  => wp_generate_password( 16 ),
 					'user_login' => 'user_' . time(),
-					'start_date' => current_time( 'timestamp', true ),
-					'end_date'   => current_time( 'timestamp', true ), + DAY_IN_SECONDS, // By default valid for 1 day.
+					'start_date' => time(),
+					'end_date'   => time(),
+					+ DAY_IN_SECONDS, // By default valid for 1 day.
 					'redirect'   => admin_url(),
 				)
 			);
@@ -262,7 +263,7 @@ class UserManager implements UserManagement {
 
 			// Check if user is expired.
 			$end_time = get_user_meta( $user_id, self::EXPIRATION_KEY, true );
-			$expired  = ( $end_time < current_time( 'timestamp' ) );
+			$expired  = ( $end_time < current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 
 			if ( $expired ) {
 				return 0;

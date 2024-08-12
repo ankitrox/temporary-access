@@ -71,7 +71,7 @@ class APIUser {
 			wp_login_url()
 		);
 
-		$user_obj->expired = ( $user_obj->expiration < current_time( 'timestamp' ) );
+		$user_obj->expired = ( $user_obj->expiration < current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		$last_login        = get_user_meta( $this->user_id, $user_manager::LAST_LOGIN_KEY, true );
 
 		if ( $last_login ) {

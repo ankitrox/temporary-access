@@ -38,9 +38,9 @@ export default function DeleteConfirmation() {
 	const onDelete = async () => {
 		const { error } = await deleteUser(user?.ID);
 		if (!error) {
-			dispatch(STORE_NAME).invalidateResolution('getUsers', [
-				getPageModal,
-			]);
+			dispatch(STORE_NAME).invalidateResolutionForStoreSelector(
+				'getUsers'
+			);
 
 			setNotice({
 				code: 'user_deleted',

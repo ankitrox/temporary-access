@@ -2,5 +2,5 @@
  * Datastore constants.
  */
 
-export const STORE_NAME = 'tempaccess-plugin';
-export const UI_STORE_NAME = 'tempaccess-plugin/ui';
+export const STORE_NAME = 'temporary-access';
+export const UI_STORE_NAME = 'temporary-access/ui';

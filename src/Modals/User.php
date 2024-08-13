@@ -14,7 +14,21 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * Class User
+ * Class User.
+ *
+ * @property int    $id          User ID.
+ * @property string $user_email  User email.
+ * @property string $first_name  First name.
+ * @property string $last_name   Last name.
+ * @property string $user_login  User login.
+ * @property string $role        User role.
+ * @property string $start_date  Start date.
+ * @property string $end_date    End date.
+ * @property string $redirect    Redirect URL.
+ * @property int    $gmt_timestamp_start Start date in GMT.
+ * @property int    $local_timestamp_start Start date in local timezone.
+ * @property int    $gmt_timestamp_end End date in GMT.
+ * @property int    $local_timestamp_end End date in local timezone.
  *
  * @package Ankit\TemporaryAccess\Modal
  */
@@ -134,5 +148,58 @@ class User {
 				throw new Exception( __( 'Invalid ID specified for the user.', 'temporary-access' ) );
 			}
 		}
+	}
+
+	/**
+	 * Validate the start date.
+	 *
+	 * @throws InvalidArgumentException Exception for invalid date.
+	 */
+	public function validate_start_date() {
+		if ( empty( $this->start_date ) ) {
+			throw new InvalidArgumentException( __( 'Please provide start date', 'temporary-access' ) );
+		}
+
+		$dates = $this->validate_date( $this->start_date );
+
+		$this->gmt_timestamp_start   = $dates['gmt_timestamp'];
+		$this->local_timestamp_start = $dates['local_timestamp'];
+	}
+
+	/**
+	 * Validate the end date.
+	 *
+	 * @throws InvalidArgumentException Exception for invalid date.
+	 */
+	public function validate_end_date() {
+		if ( empty( $this->end_date ) ) {
+			throw new InvalidArgumentException( __( 'Please provide end date', 'temporary-access' ) );
+		}
+
+		$dates = $this->validate_date( $this->end_date );
+
+		$this->gmt_timestamp_end   = $dates['gmt_timestamp'];
+		$this->local_timestamp_end = $dates['local_timestamp'];
+	}
+
+	/**
+	 * Receives a date string and checks if it can be converted to the timestamp according to site's timezone.
+	 *
+	 * @param string $date Date string.
+	 *
+	 * @throws InvalidArgumentException Exception for invalid date.
+	 */
+	private function validate_date( string $date ) {
+		$offset    = floatval( get_option( 'gmt_offset', 0 ) ) * HOUR_IN_SECONDS;
+		$timestamp = strtotime( $date );
+
+		if ( false === $timestamp ) {
+			throw new InvalidArgumentException( __( 'Invalid date format', 'temporary-access' ) );
+		}
+
+		return array(
+			'gmt_timestamp'   => $timestamp,
+			'local_timestamp' => $timestamp + $offset,
+		);
 	}
 }

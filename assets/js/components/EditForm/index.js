@@ -24,9 +24,10 @@ import { Box, Stepper, Step, StepLabel } from '@mui/material';
 import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function EditForm() {
+	const dispatch = useDispatch();
 	const { clearErrors, decrementStep, incrementStep, setContext, resetForm } =
 		useDispatch(UI_STORE_NAME);
-	const { createUser, setNotice } = useDispatch(STORE_NAME);
+	const { createUser, getUsers, setNotice } = useDispatch(STORE_NAME);
 
 	const currentStep = useSelect((select) =>
 		select(UI_STORE_NAME).getCurrentStep()
@@ -41,6 +42,10 @@ export default function EditForm() {
 
 	const stepValidationFn = useSelect((select) =>
 		select(UI_STORE_NAME).getStepValidationFn()
+	);
+
+	const getPageModal = useSelect((select) =>
+		select(UI_STORE_NAME).getPageModal()
 	);
 
 	const formData = useSelect((select) => select(UI_STORE_NAME).getData());
@@ -103,7 +108,12 @@ export default function EditForm() {
 					noticeType: 'success',
 				});
 
+				dispatch(STORE_NAME).invalidateResolution('getUsers', [
+					getPageModal,
+				]);
+
 				onCloseModal();
+				getUsers(getPageModal);
 			}
 		}
 	};
@@ -118,6 +128,7 @@ export default function EditForm() {
 		<Modal
 			className="tempaccess-modal-edit-form"
 			shouldCloseOnClickOutside={false}
+			shouldCloseOnEsc={false}
 			isDismissible
 			onRequestClose={onCloseModal}
 		>

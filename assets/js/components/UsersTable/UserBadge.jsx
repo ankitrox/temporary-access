@@ -13,7 +13,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { Badge } from '@mui/material';
 
-export default function UserBadge(user) {
+export default function UserBadge({ user }) {
 	const expired = user.expired;
 
 	let badgeColor = 'error';

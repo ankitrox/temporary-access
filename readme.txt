@@ -38,14 +38,30 @@ You can created unlimited users.
 = Does it provide a REST API endpoint? =
 Yes. It provides REST API endpoints with `tempaccess/v1/` route.
 
+= Can I set the password for the user? =
+Setting a password for the user is available in REST API, but not in the user interface. However; this can be introduced 
+in the upcoming versions.
+
+= How should I share the magic login link with the users? =
+There is an option to copy the login link to the clipboard in users listing (Users > Temporary Access) page. You can copy the link 
+and share it with user. We will introduce the feature to send it via email in future versions.
+
+= Can I set the option to redirect the users after they login to a specific page? =
+This option will be introduced in the future version and is scheduled in the roadmap for the plugin.
+
+= How can I suggest the new feature for the plugin? =
+You can suggest a new feature via support forum or you can open a [new issue on github](https://github.com/ankitrox/temporary-access/issues/new). 
+
 == Screenshots ==
 
-1. Users listing
-2. Add user
-3. Create user
-4. Delete user
+1. Users Listing
+2. Add User
+3. Updare User
+4. Delete User
 
 == Changelog ==
 
 = 1.0.0 =
 * First release.
+
+= Upgrade notice =

@@ -105,9 +105,11 @@ class Plugin {
 		$this->user_manager  = $this->container->get( 'user_manager' );
 		$this->user_endpoint = $this->container->get( 'temp_user_endpoint' );
 		$this->authenticator = $this->container->get( 'authenticator' );
+		$users_table         = $this->container->get( 'users_table' );
 
 		$this->authenticator->init();
 		$settings->init();
+		$users_table->init();
 
 		add_action( 'init', array( $this->user_manager, 'init' ) );
 		add_action( 'rest_api_init', array( $this->user_endpoint, 'register' ) );

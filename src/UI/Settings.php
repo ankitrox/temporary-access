@@ -23,7 +23,6 @@ use function Ankit\TemporaryAccess\plugin;
  */
 class Settings {
 
-
 	/**
 	 * Initialization actions.
 	 *

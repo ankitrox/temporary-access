@@ -12,6 +12,7 @@ namespace Ankit\TemporaryAccess;
 
 use Ankit\TemporaryAccess\Interfaces\Container as ContainerInterface;
 use Ankit\TemporaryAccess\UI\Settings;
+use Ankit\TemporaryAccess\UI\UsersTable;
 use InvalidArgumentException;
 use Pimple\Container as PimpleContainer;
 use Ankit\TemporaryAccess\REST\TempUser;
@@ -109,6 +110,15 @@ class Container implements ContainerInterface {
 		 */
 		$this->container['settings'] = function () {
 			return new Settings();
+		};
+
+		/**
+		 * Users list table service.
+		 *
+		 * @return UsersTable
+		 */
+		$this->container['users_table'] = function () {
+			return new UsersTable();
 		};
 	}
 }

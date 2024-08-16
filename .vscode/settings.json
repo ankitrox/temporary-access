@@ -1,9 +1,11 @@
 {
 	"search.exclude": {
+		"dist/": true,
 		"node_modules/": true,
 		"vendor/": true
 	},
 	"files.exclude": {
+		"dist/": true,
 		"node_modules/": true,
 		"third-party/": true,
 		"vendor/": true

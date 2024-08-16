@@ -6,6 +6,7 @@
  * WordPress dependencies
  */
 import { Fragment } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -19,6 +20,7 @@ import DeleteConfirmation from './DeleteConfirmation';
 export default function TempAccess() {
 	return (
 		<div className="tempaccess">
+			<h1>{__('Temporary Access', 'temp-access')}</h1>
 			<Notices />
 			<Fragment>
 				<AddUserCTA />

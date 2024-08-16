@@ -30,7 +30,7 @@ class Settings {
 	 * @return void
 	 */
 	public function init(): void {
-		add_filter( 'admin_body_class', array($this, 'body_class') );
+		add_filter( 'admin_body_class', array( $this, 'body_class' ) );
 		add_action( 'admin_menu', array( $this, 'submenu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 	}
@@ -135,7 +135,7 @@ class Settings {
 
 	/**
 	 * Add body class to settings
-	 * 	
+	 *
 	 * @param string $classes Body classes.
 	 * @return string
 	 */

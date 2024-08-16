@@ -30,6 +30,7 @@ class Settings {
 	 * @return void
 	 */
 	public function init(): void {
+		add_filter( 'admin_body_class', array( $this, 'body_class' ) );
 		add_action( 'admin_menu', array( $this, 'submenu' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 	}
@@ -95,6 +96,14 @@ class Settings {
 		wp_enqueue_script( 'wp-temp-access-api' );
 		wp_enqueue_script( 'wp-temp-access' );
 		wp_enqueue_style( 'wp-components' );
+
+		// Enqueue plugin styles.
+		wp_enqueue_style(
+			'wp-temp-access',
+			trailingslashit( plugin()->url ) . 'assets/build/tempaccess-css.css',
+			array(),
+			$assets['version']
+		);
 	}
 
 	/**
@@ -118,10 +127,23 @@ class Settings {
 		?>
 		<div id="temp-access-settings-page">
 			<div class="wrap">
-				<h1 class="wp-heading-inline"><?php echo esc_html( __( 'Temporary Access Settings', 'temporary-access' ) ); ?></h1>
 				<div id="temp-access-root"></div>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Add body class to settings
+	 *
+	 * @param string $classes Body classes.
+	 * @return string
+	 */
+	public function body_class( string $classes ): string {
+		if ( 'users_page_wp-temporary-access' === get_current_screen()->id ) {
+			$classes .= ' tempaccess-plugin';
+		}
+
+		return $classes;
 	}
 }

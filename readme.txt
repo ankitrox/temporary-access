@@ -24,6 +24,10 @@ Temporary access plugin allows to provide temporary access to users without pass
 * Best code quality. `SOLID` principles used during development.
 * Active support and maintenance.
 
+= Contribution =
+You can suggest a feature on plugin support forum or open an issue in the [Github repository](https://github.com/ankitrox/temporary-access/issues/new). 
+Feel free to open a [pull request](https://github.com/ankitrox/temporary-access/pulls) for any suggestions.
+
 == Installation ==
 1. Install Temporary Acess from the 'Plugins' section in your dashboard (Plugins > Add New > Search for "Temporary Access" ).
 

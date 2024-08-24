@@ -30,6 +30,8 @@ Temporary access plugin allows to provide temporary access to users without pass
 
 3. Activate it through the 'Plugins' section.
 
+4. Go to Users > Temporary Users, you can manage temporary users in this page.
+
 == Frequently Asked Questions ==
 
 = How many users can be created using this plugin? =
@@ -45,6 +47,10 @@ in the upcoming versions.
 = How should I share the magic login link with the users? =
 There is an option to copy the login link to the clipboard in users listing (Users > Temporary Access) page. You can copy the link 
 and share it with user. We will introduce the feature to send it via email in future versions.
+
+= Can I set the expiry in minutes, hours or days? =
+You can set the expiry to all of these and even in seconds. Plugin provides the date and time picker for 
+expiry, so you can select date time upto seconds of your choice.
 
 = Can I set the option to redirect the users after they login to a specific page? =
 This option will be introduced in the future version and is scheduled in the roadmap for the plugin.
@@ -63,5 +69,3 @@ You can suggest a new feature via support forum or you can open a [new issue on 
 
 = 1.0.0 =
 * First release.
-
-= Upgrade notice =

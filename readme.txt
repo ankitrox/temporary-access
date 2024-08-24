@@ -1,6 +1,7 @@
 === Temporary Access ===
 Contributors: shrutigade, wpgurudev
-Tags: passwordless, login, temporary, temporary access, limit login
+Donate link: http://sharethingz.com
+Tags: passwordless, login, temporary, limit login, passwordless
 Requires at least: 5.5.0
 Tested up to: 6.7.0
 Requires PHP: 7.3
@@ -69,3 +70,8 @@ You can suggest a new feature via support forum or you can open a [new issue on 
 
 = 1.0.0 =
 * First release.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+* Initial version.

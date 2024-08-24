@@ -111,8 +111,8 @@ class Settings {
 	public function submenu(): void {
 		add_submenu_page(
 			'users.php',
-			__( 'Temporary Access Settings', 'temporary-access-wp' ),
-			__( 'Temporary Access', 'temporary-access-wp' ),
+			__( 'Temporary Access Settings', 'passwordless-login' ),
+			__( 'Temporary Access', 'passwordless-login' ),
 			'edit_users',
 			'wp-temporary-access',
 			array( $this, 'output' )

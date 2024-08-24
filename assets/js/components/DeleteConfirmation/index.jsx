@@ -44,7 +44,7 @@ export default function DeleteConfirmation() {
 
 			setNotice({
 				code: 'user_deleted',
-				message: __('User deleted successfully', 'temporary-access-wp'),
+				message: __('User deleted successfully', 'passwordless-login'),
 				noticeType: 'success',
 			});
 
@@ -65,12 +65,12 @@ export default function DeleteConfirmation() {
 					<p>
 						{__(
 							'Are you sure you want to delete the user?',
-							'temporary-access-wp'
+							'passwordless-login'
 						)}
 					</p>
 					<Flex>
 						<Button onClick={onCloseModal} variant="outlined">
-							{__('Cancel', 'temporary-access-wp')}
+							{__('Cancel', 'passwordless-login')}
 						</Button>
 
 						<Button
@@ -78,7 +78,7 @@ export default function DeleteConfirmation() {
 							color="error"
 							onClick={onDelete}
 						>
-							{__('Delete', 'temporary-access-wp')}
+							{__('Delete', 'passwordless-login')}
 						</Button>
 					</Flex>
 				</Modal>

@@ -17,7 +17,7 @@ const { isPlainObject } = lodash;
 export const validateUserCreationParams = function (userData) {
 	invariant(
 		isPlainObject(userData),
-		__('Params must be an object', 'temporary-access-wp')
+		__('Params must be an object', 'passwordless-login')
 	);
 
 	invariant(userData.user_email, `Email is required.`);

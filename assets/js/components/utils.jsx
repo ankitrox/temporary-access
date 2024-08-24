@@ -23,12 +23,12 @@ export function ActionItems({ handler = () => {} }) {
 		<div className="tempuser-actions">
 			<Button
 				icon="edit"
-				title={__('Edit', 'temporary-access-wp')}
+				title={__('Edit', 'passwordless-login')}
 				{...commonProps}
 			/>
 			<Button
 				icon="trash"
-				title={__('Delete', 'temporary-access-wp')}
+				title={__('Delete', 'passwordless-login')}
 				{...commonProps}
 			/>
 		</div>

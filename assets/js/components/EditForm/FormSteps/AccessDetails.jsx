@@ -23,7 +23,7 @@ import { UI_STORE_NAME } from '../../../datastores/constants';
 import Datepicker from '../../Datepicker';
 
 // Build the options for the select control.
-const roles = [{ label: __('Select a Role', 'temporary-access-wp'), value: '' }];
+const roles = [{ label: __('Select a Role', 'passwordless-login'), value: '' }];
 if (Object.keys(tempAccess.roles).length) {
 	for (const role in tempAccess.roles) {
 		roles.push({ label: tempAccess.roles[role], value: role });
@@ -46,15 +46,15 @@ export default function AccessDetails() {
 		() => ({
 			role: {
 				validationFn: isValidRole,
-				errorMessage: __('Invalid role', 'temporary-access-wp'),
+				errorMessage: __('Invalid role', 'passwordless-login'),
 			},
 			startDate: {
 				validationFn: isValidDate,
-				errorMessage: __('Invalid date', 'temporary-access-wp'),
+				errorMessage: __('Invalid date', 'passwordless-login'),
 			},
 			endDate: {
 				validationFn: isValidDate,
-				errorMessage: __('Invalid date', 'temporary-access-wp'),
+				errorMessage: __('Invalid date', 'passwordless-login'),
 			},
 		}),
 		[]
@@ -109,7 +109,7 @@ export default function AccessDetails() {
 		<Fragment>
 			<BaseControl>
 				<SelectControl
-					label={__('Role', 'temporary-access-wp')}
+					label={__('Role', 'passwordless-login')}
 					onChange={onChangeField('role')}
 					options={roles}
 					value={role}
@@ -120,7 +120,7 @@ export default function AccessDetails() {
 
 			<BaseControl>
 				<Datepicker
-					label={__('Start Date', 'temporary-access-wp')}
+					label={__('Start Date', 'passwordless-login')}
 					dateValue={startDate}
 					onChange={onChangeField('startDate')}
 				/>
@@ -130,7 +130,7 @@ export default function AccessDetails() {
 
 			<BaseControl>
 				<Datepicker
-					label={__('End Date', 'temporary-access-wp')}
+					label={__('End Date', 'passwordless-login')}
 					dateValue={endDate}
 					onChange={onChangeField('endDate')}
 				/>

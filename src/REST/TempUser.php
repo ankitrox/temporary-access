@@ -183,10 +183,10 @@ class TempUser {
 			$delete = $this->user_manager->delete( (int) $request->get_param( 'ID' ) );
 
 			if ( $delete ) {
-				return new WP_REST_Response( __( 'User has been deleted successfully', 'temporary-access-wp' ) );
+				return new WP_REST_Response( __( 'User has been deleted successfully', 'passwordless-login' ) );
 			}
 
-			throw new Exception( __( 'Could not delete the user. Please try again.', 'temporary-access-wp' ) );
+			throw new Exception( __( 'Could not delete the user. Please try again.', 'passwordless-login' ) );
 
 		} catch ( Throwable $e ) {
 

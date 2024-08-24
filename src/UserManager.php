@@ -163,7 +163,7 @@ class UserManager implements UserManagement {
 	 */
 	public function update( int $uid = null, array $args = array() ): \stdClass {
 		if ( ! $uid ) {
-			throw new InvalidArgumentException( __( 'User ID is required for update', 'temporary-access-wp' ) );
+			throw new InvalidArgumentException( __( 'User ID is required for update', 'passwordless-login' ) );
 		}
 
 		try {
@@ -220,13 +220,13 @@ class UserManager implements UserManagement {
 	 */
 	public function delete( int $user_id = null ): bool {
 		if ( ! $user_id ) {
-			throw new InvalidArgumentException( __( 'User ID is required for deletion', 'temporary-access-wp' ) );
+			throw new InvalidArgumentException( __( 'User ID is required for deletion', 'passwordless-login' ) );
 		}
 
 		$user = get_user_by( 'id', $user_id );
 
 		if ( ! $user ) {
-			throw new Exception( __( 'This user does not exist', 'temporary-access-wp' ) );
+			throw new Exception( __( 'This user does not exist', 'passwordless-login' ) );
 		}
 
 		if ( ! function_exists( 'wp_delete_user' ) ) {

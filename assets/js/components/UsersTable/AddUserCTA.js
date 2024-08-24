@@ -32,7 +32,7 @@ export default function AddUserCTA() {
 					variant="primary"
 					onClick={() => setContext('edit')}
 				>
-					{__('Add New User', 'temporary-access-wp')}
+					{__('Add New User', 'passwordless-login')}
 				</Button>
 			</Spacer>
 		</Fragment>

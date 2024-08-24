@@ -9,6 +9,7 @@ coverage
 tests/php-coverage
 .phpunit.result.cache
 tests/e2e/test-results
+built-plugin
 
 # Directories/files that may appear in your environment
 .DS_Store
@@ -32,6 +33,7 @@ wp-cli.local.yml
 *.log
 .prettierignore
 .nvmrc
+.prettierrc.js
 
 # Composer
 !/vendor/

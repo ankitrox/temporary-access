@@ -58,11 +58,9 @@ package.json
 package-lock.json
 phpcs.xml.dist
 README.md
-readme.txt
 .wordpress-org
 .distignore
 assets/js/
 assets/sass/
 webpack.config.js
 .babelrc
-LICENSE

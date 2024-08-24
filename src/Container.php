@@ -54,7 +54,7 @@ class Container implements ContainerInterface {
 	public function get( string $service ) {
 		if ( ! in_array( $service, $this->container->keys(), true ) ) {
 			/* translators: %$s is replaced with requested service name. */
-			throw new InvalidArgumentException( sprintf( __( 'Invalid Service %s Passed to the container', 'passwordless-login' ), $service ) ); //phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
+			throw new InvalidArgumentException( sprintf( __( 'Invalid Service %s Passed to the container', 'passwordless-temporary-login' ), $service ) ); //phpcs:disable WordPress.Security.EscapeOutput.ExceptionNotEscaped
 		}
 
 		return $this->container[ $service ];

@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Passwordless Login
+ * Plugin Name: Passwordless Temporary Login
  * Version: 1.0.0
  * Author: Ankit Gade
  * Author URI: https://iamank.it
@@ -8,7 +8,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Requires at least: 5.4.2
  * Requires PHP: 7.3
- * Text-Domain: passwordless-login
+ * Text-Domain: passwordless-temporary-login
  *
  * @package Ankit\TemporaryAccess
  * @since 1.0.0

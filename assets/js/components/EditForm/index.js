@@ -27,7 +27,8 @@ export default function EditForm() {
 	const dispatch = useDispatch();
 	const { clearErrors, decrementStep, incrementStep, setContext, resetForm } =
 		useDispatch(UI_STORE_NAME);
-	const { createUser, getUsers, setNotice } = useDispatch(STORE_NAME);
+	const { createUser, setNotice } = useDispatch(STORE_NAME);
+	const { getUsers } = useSelect(STORE_NAME);
 
 	const currentStep = useSelect((select) =>
 		select(UI_STORE_NAME).getCurrentStep()
@@ -103,8 +104,14 @@ export default function EditForm() {
 				setNotice({
 					code: 'user_created',
 					message: isUserEdit
-						? __('User updated successfully', 'passwordless-login')
-						: __('User created successfully', 'passwordless-login'),
+						? __(
+								'User updated successfully',
+								'passwordless-temporary-login'
+							)
+						: __(
+								'User created successfully',
+								'passwordless-temporary-login'
+							),
 					noticeType: 'success',
 				});
 
@@ -121,8 +128,8 @@ export default function EditForm() {
 	const isLastStep = currentStep === steps.length - 1;
 	const hasPreviousStep = currentStep > 0;
 	const CTALabel = isUserEdit
-		? __('Update User', 'passwordless-login')
-		: __('Create User', 'passwordless-login');
+		? __('Update User', 'passwordless-temporary-login')
+		: __('Create User', 'passwordless-temporary-login');
 
 	return (
 		<Modal
@@ -166,12 +173,12 @@ export default function EditForm() {
 				<Flex>
 					{hasPreviousStep && (
 						<Button variant="secondary" onClick={onBack}>
-							{__('Back', 'passwordless-login')}
+							{__('Back', 'passwordless-temporary-login')}
 						</Button>
 					)}
 					{!isLastStep && (
 						<Button variant="secondary" onClick={onNext}>
-							{__('Next', 'passwordless-login')}
+							{__('Next', 'passwordless-temporary-login')}
 						</Button>
 					)}
 					{isLastStep && (

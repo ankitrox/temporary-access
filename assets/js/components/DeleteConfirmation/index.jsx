@@ -44,7 +44,7 @@ export default function DeleteConfirmation() {
 
 			setNotice({
 				code: 'user_deleted',
-				message: __('User deleted successfully', 'passwordless-login'),
+				message: __('User deleted successfully', 'passwordless-temporary-login'),
 				noticeType: 'success',
 			});
 
@@ -65,12 +65,12 @@ export default function DeleteConfirmation() {
 					<p>
 						{__(
 							'Are you sure you want to delete the user?',
-							'passwordless-login'
+							'passwordless-temporary-login'
 						)}
 					</p>
 					<Flex>
 						<Button onClick={onCloseModal} variant="outlined">
-							{__('Cancel', 'passwordless-login')}
+							{__('Cancel', 'passwordless-temporary-login')}
 						</Button>
 
 						<Button
@@ -78,7 +78,7 @@ export default function DeleteConfirmation() {
 							color="error"
 							onClick={onDelete}
 						>
-							{__('Delete', 'passwordless-login')}
+							{__('Delete', 'passwordless-temporary-login')}
 						</Button>
 					</Flex>
 				</Modal>

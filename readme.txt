@@ -1,4 +1,4 @@
-=== Passwordless Login ===
+=== Passwordless Temporary Login ===
 Contributors: shrutigade, wpgurudev
 Donate link: http://sharethingz.com
 Tags: passwordless, login, temporary, limit login, passwordless

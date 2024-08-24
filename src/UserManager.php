@@ -163,7 +163,7 @@ class UserManager implements UserManagement {
 	 */
 	public function update( int $uid = null, array $args = array() ): \stdClass {
 		if ( ! $uid ) {
-			throw new InvalidArgumentException( esc_html__( 'User ID is required for update', 'passwordless-login' ) );
+			throw new InvalidArgumentException( esc_html__( 'User ID is required for update', 'passwordless-temporary-login' ) );
 		}
 
 		try {
@@ -220,13 +220,13 @@ class UserManager implements UserManagement {
 	 */
 	public function delete( int $user_id = null ): bool {
 		if ( ! $user_id ) {
-			throw new InvalidArgumentException( esc_html__( 'User ID is required for deletion', 'passwordless-login' ) );
+			throw new InvalidArgumentException( esc_html__( 'User ID is required for deletion', 'passwordless-temporary-login' ) );
 		}
 
 		$user = get_user_by( 'id', $user_id );
 
 		if ( ! $user ) {
-			throw new Exception( esc_html__( 'This user does not exist', 'passwordless-login' ) );
+			throw new Exception( esc_html__( 'This user does not exist', 'passwordless-temporary-login' ) );
 		}
 
 		if ( ! function_exists( 'wp_delete_user' ) ) {

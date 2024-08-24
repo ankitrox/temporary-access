@@ -34,7 +34,7 @@ export default function Datepicker({
 								`${date('d.m.Y H:i', currentDate)} - `}
 							{__(
 								"Corresponds to site's timezone",
-								'passwordless-login'
+								'passwordless-temporary-login'
 							)}
 						</small>
 					</div>

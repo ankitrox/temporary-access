@@ -32,7 +32,7 @@ export default function AddUserCTA() {
 					variant="primary"
 					onClick={() => setContext('edit')}
 				>
-					{__('Add New User', 'passwordless-login')}
+					{__('Add New User', 'passwordless-temporary-login')}
 				</Button>
 			</Spacer>
 		</Fragment>

@@ -20,7 +20,7 @@ import DeleteConfirmation from './DeleteConfirmation';
 export default function TempAccess() {
 	return (
 		<div className="tempaccess">
-			<h1>{__('Temporary Access', 'temp-access')}</h1>
+			<h1>{__('Passwordless Temporary Login', 'temp-access')}</h1>
 			<Notices />
 			<Fragment>
 				<AddUserCTA />

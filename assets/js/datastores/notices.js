@@ -45,7 +45,7 @@ const baseActions = {
 	setNotice({ code, noticeType, message }) {
 		invariant(
 			allowedNoticeTypes.includes(noticeType),
-			__('Invalid notice type.', 'passwordless-login')
+			__('Invalid notice type.', 'passwordless-temporary-login')
 		);
 
 		return {

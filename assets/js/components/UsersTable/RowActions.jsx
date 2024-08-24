@@ -27,7 +27,7 @@ export default function RowActions({ user }) {
 		setNotice({
 			code: 'link-copied',
 			noticeType: 'success',
-			message: __('Link copied to clipboard', 'passwordless-login'),
+			message: __('Link copied to clipboard', 'passwordless-temporary-login'),
 		});
 	};
 
@@ -45,19 +45,19 @@ export default function RowActions({ user }) {
 		<div className="tempuser-actions">
 			<Button
 				icon="edit"
-				title={__('Edit', 'passwordless-login')}
+				title={__('Edit', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={onEdit}
 			/>
 			<Button
 				icon="trash"
-				title={__('Delete', 'passwordless-login')}
+				title={__('Delete', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={onDelete}
 			/>
 			<Button
 				icon="admin-links"
-				title={__('Copy link', 'passwordless-login')}
+				title={__('Copy link', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={() => onCopyLink(user)}
 			/>

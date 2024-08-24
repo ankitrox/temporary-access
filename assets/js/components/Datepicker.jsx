@@ -34,7 +34,7 @@ export default function Datepicker({
 								`${date('d.m.Y H:i', currentDate)} - `}
 							{__(
 								"Corresponds to site's timezone",
-								'temporary-access'
+								'temporary-access-wp'
 							)}
 						</small>
 					</div>

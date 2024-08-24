@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: WP Temporary Access
+ * Plugin Name: Temporary Access for WordPress
  * Version: 1.0.0
  * Author: Ankit Gade
  * Author URI: https://iamank.it
  * License: GPLv3+
  * Requires at least: 5.4.2
  * Requires PHP: 7.3
- * Text-Domain: temporary-access
+ * Text-Domain: temporary-access-wp
  *
  * @package Ankit\TemporaryAccess
  * @since 1.0.0

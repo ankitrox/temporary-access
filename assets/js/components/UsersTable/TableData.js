@@ -21,33 +21,33 @@ const commonProps = {
 export const DataColumns = [
 	{
 		field: 'name',
-		headerName: __('Name', 'temporary-access'),
+		headerName: __('Name', 'temporary-access-wp'),
 		width: 300,
 	},
 	{
 		field: 'username',
-		headerName: __('Username', 'temporary-access'),
+		headerName: __('Username', 'temporary-access-wp'),
 		width: 200,
 	},
 	{
 		field: 'email',
-		headerName: __('Email', 'temporary-access'),
+		headerName: __('Email', 'temporary-access-wp'),
 		width: 250,
 	},
 	{
 		field: 'last_access',
-		headerName: __('Last access', 'temporary-access'),
+		headerName: __('Last access', 'temporary-access-wp'),
 		width: 250,
 	},
 	{
 		field: 'status',
-		headerName: __('Status', 'temporary-access'),
+		headerName: __('Status', 'temporary-access-wp'),
 		renderCell: ({ row }) => <UserBadge user={row} />,
 		width: 120,
 	},
 	{
 		field: 'actions',
-		headerName: __('Actions', 'temporary-access'),
+		headerName: __('Actions', 'temporary-access-wp'),
 		renderCell: ({ row }) => <RowActions user={row} />,
 		width: 200,
 	},

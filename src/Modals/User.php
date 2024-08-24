@@ -97,21 +97,21 @@ class User {
 		 * Email is mandatory during registration.
 		 */
 		if ( 'create' === self::$context && empty( $this->user_email ) ) {
-			throw new InvalidArgumentException( __( 'Please provide email address', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Please provide email address', 'temporary-access-wp' ) );
 		}
 
 		/**
 		 * Email should not be already in use.
 		 */
 		if ( 'create' === self::$context && email_exists( $this->user_email ) ) {
-			throw new InvalidArgumentException( __( 'Email is already associated with an account. Please use different email address', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Email is already associated with an account. Please use different email address', 'temporary-access-wp' ) );
 		}
 
 		/**
 		 * Finally, email needs to be a valid one.
 		 */
 		if ( ! empty( $this->user_email ) && ! filter_var( $this->user_email, FILTER_VALIDATE_EMAIL ) ) {
-			throw new InvalidArgumentException( __( 'Invalid email address', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Invalid email address', 'temporary-access-wp' ) );
 		}
 	}
 
@@ -132,7 +132,7 @@ class User {
 		$roles = array_keys( $roles );
 
 		if ( ! in_array( $this->role, $roles, true ) ) {
-			throw new InvalidArgumentException( __( 'Invalid role selected', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Invalid role selected', 'temporary-access-wp' ) );
 		}
 	}
 
@@ -145,7 +145,7 @@ class User {
 		if ( ! empty( $this->id ) ) {
 			$user = get_user_by( 'id', (int) $this->id );
 			if ( ! $user ) {
-				throw new Exception( __( 'Invalid ID specified for the user.', 'temporary-access' ) );
+				throw new Exception( __( 'Invalid ID specified for the user.', 'temporary-access-wp' ) );
 			}
 		}
 	}
@@ -157,7 +157,7 @@ class User {
 	 */
 	public function validate_start_date() {
 		if ( empty( $this->start_date ) ) {
-			throw new InvalidArgumentException( __( 'Please provide start date', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Please provide start date', 'temporary-access-wp' ) );
 		}
 
 		$dates = $this->validate_date( $this->start_date );
@@ -173,7 +173,7 @@ class User {
 	 */
 	public function validate_end_date() {
 		if ( empty( $this->end_date ) ) {
-			throw new InvalidArgumentException( __( 'Please provide end date', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Please provide end date', 'temporary-access-wp' ) );
 		}
 
 		$dates = $this->validate_date( $this->end_date );
@@ -194,7 +194,7 @@ class User {
 		$timestamp = strtotime( $date );
 
 		if ( false === $timestamp ) {
-			throw new InvalidArgumentException( __( 'Invalid date format', 'temporary-access' ) );
+			throw new InvalidArgumentException( __( 'Invalid date format', 'temporary-access-wp' ) );
 		}
 
 		return array(

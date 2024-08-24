@@ -103,8 +103,11 @@ export default function EditForm() {
 				setNotice({
 					code: 'user_created',
 					message: isUserEdit
-						? __('User updated successfully', 'temporary-access')
-						: __('User created successfully', 'temporary-access'),
+						? __('User updated successfully', 'temporary-access-wp')
+						: __(
+								'User created successfully',
+								'temporary-access-wp'
+							),
 					noticeType: 'success',
 				});
 
@@ -121,8 +124,8 @@ export default function EditForm() {
 	const isLastStep = currentStep === steps.length - 1;
 	const hasPreviousStep = currentStep > 0;
 	const CTALabel = isUserEdit
-		? __('Update User', 'temporary-access')
-		: __('Create User', 'temporary-access');
+		? __('Update User', 'temporary-access-wp')
+		: __('Create User', 'temporary-access-wp');
 
 	return (
 		<Modal
@@ -166,12 +169,12 @@ export default function EditForm() {
 				<Flex>
 					{hasPreviousStep && (
 						<Button variant="secondary" onClick={onBack}>
-							{__('Back', 'temporary-access')}
+							{__('Back', 'temporary-access-wp')}
 						</Button>
 					)}
 					{!isLastStep && (
 						<Button variant="secondary" onClick={onNext}>
-							{__('Next', 'temporary-access')}
+							{__('Next', 'temporary-access-wp')}
 						</Button>
 					)}
 					{isLastStep && (

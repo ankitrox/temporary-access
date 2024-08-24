@@ -34,7 +34,7 @@ class UsersTable {
      */
     public function filter_users( $args ) {
         if ( 'users' === get_current_screen()->id ) {
-            $args['meta_query'] = array(
+            $args['meta_query'] = array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
                 array(
                     'key'     => UserManager::START_DATE_KEY,
                     'compare' => 'NOT EXISTS',

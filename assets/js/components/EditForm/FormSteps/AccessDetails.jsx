@@ -23,7 +23,9 @@ import { UI_STORE_NAME } from '../../../datastores/constants';
 import Datepicker from '../../Datepicker';
 
 // Build the options for the select control.
-const roles = [{ label: __('Select a Role', 'temporary-access'), value: '' }];
+const roles = [
+	{ label: __('Select a Role', 'passwordless-temporary-login'), value: '' },
+];
 if (Object.keys(tempAccess.roles).length) {
 	for (const role in tempAccess.roles) {
 		roles.push({ label: tempAccess.roles[role], value: role });
@@ -46,15 +48,24 @@ export default function AccessDetails() {
 		() => ({
 			role: {
 				validationFn: isValidRole,
-				errorMessage: __('Invalid role', 'temporary-access'),
+				errorMessage: __(
+					'Invalid role',
+					'passwordless-temporary-login'
+				),
 			},
 			startDate: {
 				validationFn: isValidDate,
-				errorMessage: __('Invalid date', 'temporary-access'),
+				errorMessage: __(
+					'Invalid date',
+					'passwordless-temporary-login'
+				),
 			},
 			endDate: {
 				validationFn: isValidDate,
-				errorMessage: __('Invalid date', 'temporary-access'),
+				errorMessage: __(
+					'Invalid date',
+					'passwordless-temporary-login'
+				),
 			},
 		}),
 		[]
@@ -67,9 +78,6 @@ export default function AccessDetails() {
 			if (fieldValidationFn(value)) {
 				clearError(`invalid_${field}`);
 			}
-
-			console.log('field', field);
-			console.log('value', value);
 
 			setData(field, value);
 		};
@@ -109,7 +117,7 @@ export default function AccessDetails() {
 		<Fragment>
 			<BaseControl>
 				<SelectControl
-					label={__('Role', 'temporary-access')}
+					label={__('Role', 'passwordless-temporary-login')}
 					onChange={onChangeField('role')}
 					options={roles}
 					value={role}
@@ -120,7 +128,7 @@ export default function AccessDetails() {
 
 			<BaseControl>
 				<Datepicker
-					label={__('Start Date', 'temporary-access')}
+					label={__('Start Date', 'passwordless-temporary-login')}
 					dateValue={startDate}
 					onChange={onChangeField('startDate')}
 				/>
@@ -130,7 +138,7 @@ export default function AccessDetails() {
 
 			<BaseControl>
 				<Datepicker
-					label={__('End Date', 'temporary-access')}
+					label={__('End Date', 'passwordless-temporary-login')}
 					dateValue={endDate}
 					onChange={onChangeField('endDate')}
 				/>

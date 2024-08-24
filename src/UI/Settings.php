@@ -40,7 +40,7 @@ class Settings {
 	 * @param string $page_hook Page hook.
 	 */
 	public function scripts( string $page_hook ): void {
-		if ( 'users_page_wp-temporary-access' !== $page_hook ) {
+		if ( 'users_page_passwordless-temporary-login' !== $page_hook ) {
 			return;
 		}
 
@@ -111,10 +111,10 @@ class Settings {
 	public function submenu(): void {
 		add_submenu_page(
 			'users.php',
-			__( 'Temporary Access Settings', 'temporary-access' ),
-			__( 'Temporary Access', 'temporary-access' ),
+			__( 'Passwordless Temporary Login Settings', 'passwordless-temporary-login' ),
+			__( 'Passwordless Temporary Login', 'passwordless-temporary-login' ),
 			'edit_users',
-			'wp-temporary-access',
+			'passwordless-temporary-login',
 			array( $this, 'output' )
 		);
 	}
@@ -139,7 +139,7 @@ class Settings {
 	 * @return string
 	 */
 	public function body_class( string $classes ): string {
-		if ( 'users_page_wp-temporary-access' === get_current_screen()->id ) {
+		if ( 'users_page_passwordless-temporary-login' === get_current_screen()->id ) {
 			$classes .= ' tempaccess-plugin';
 		}
 

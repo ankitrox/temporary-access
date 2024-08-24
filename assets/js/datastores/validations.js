@@ -17,7 +17,7 @@ const { isPlainObject } = lodash;
 export const validateUserCreationParams = function (userData) {
 	invariant(
 		isPlainObject(userData),
-		__('Params must be an object', 'temporary-access')
+		__('Params must be an object', 'passwordless-temporary-login')
 	);
 
 	invariant(userData.user_email, `Email is required.`);

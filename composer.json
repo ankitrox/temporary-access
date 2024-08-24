@@ -27,7 +27,9 @@
     },
     "scripts": {
         "lint": "phpcs",
-        "lint-fix": "phpcbf"
+        "lint-fix": "phpcbf",
+        "build-plugin": "rsync -rc --exclude-from='.distignore' . built-plugin/",
+        "build-plugin:clear": "rm -rf built-plugin/*"
     },
     "config": {
         "allow-plugins": {

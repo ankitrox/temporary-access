@@ -77,7 +77,7 @@ class APIUser {
 		if ( $last_login ) {
 			$user_obj->last_login = human_time_diff( $last_login, time() );
 		} else {
-			$user_obj->last_login = __( 'Never', 'temporary-access' );
+			$user_obj->last_login = __( 'Never', 'passwordless-temporary-login' );
 		}
 
 		return apply_filters( 'tempaccess.api_user_modal', $user_obj );

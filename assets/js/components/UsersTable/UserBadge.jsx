@@ -17,12 +17,12 @@ export default function UserBadge({ user }) {
 	const expired = user.expired;
 
 	let badgeColor = 'error';
-	let badgeContent = __('Expired', 'temporary-access');
+	let badgeContent = __('Expired', 'passwordless-temporary-login');
 
 	// Active badge if user access is not expired.
 	if (!expired) {
 		badgeColor = 'success';
-		badgeContent = __('Active', 'temporary-access');
+		badgeContent = __('Active', 'passwordless-temporary-login');
 	}
 
 	return <Badge color={badgeColor} badgeContent={badgeContent} />;

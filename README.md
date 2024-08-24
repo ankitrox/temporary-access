@@ -1,4 +1,4 @@
-# Temporary Access For WordPress
+# Passwordless Temporary Login
 
 > Access WordPress site temporarily
 

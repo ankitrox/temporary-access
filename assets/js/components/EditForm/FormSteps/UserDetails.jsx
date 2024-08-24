@@ -35,15 +35,24 @@ export default function UserDetails() {
 		() => ({
 			email: {
 				validationFn: isValidEmail,
-				errorMessage: __('Invalid email', 'temporary-access'),
+				errorMessage: __(
+					'Invalid email',
+					'passwordless-temporary-login'
+				),
 			},
 			name: {
 				validationFn: isValidName,
-				errorMessage: __('Invalid first name', 'temporary-access'),
+				errorMessage: __(
+					'Invalid first name',
+					'passwordless-temporary-login'
+				),
 			},
 			surname: {
 				validationFn: isValidName,
-				errorMessage: __('Invalid last name', 'temporary-access'),
+				errorMessage: __(
+					'Invalid last name',
+					'passwordless-temporary-login'
+				),
 			},
 		}),
 		[]
@@ -98,7 +107,7 @@ export default function UserDetails() {
 		<Fragment>
 			<BaseControl>
 				<TextControl
-					label={__('Email', 'temporary-access')}
+					label={__('Email', 'passwordless-temporary-login')}
 					type={'email'}
 					autoComplete="off"
 					onChange={onChangeField('email')}
@@ -110,7 +119,7 @@ export default function UserDetails() {
 
 			<BaseControl>
 				<TextControl
-					label={__('First Name', 'temporary-access')}
+					label={__('First Name', 'passwordless-temporary-login')}
 					type={'text'}
 					autoComplete="off"
 					onChange={onChangeField('name')}
@@ -122,7 +131,7 @@ export default function UserDetails() {
 
 			<BaseControl>
 				<TextControl
-					label={__('Last Name', 'temporary-access')}
+					label={__('Last Name', 'passwordless-temporary-login')}
 					type={'text'}
 					autoComplete="off"
 					onChange={onChangeField('surname')}

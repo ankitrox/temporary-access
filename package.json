@@ -1,8 +1,8 @@
 {
   "name": "temporary-access",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Provide temporary access to users for a specific time period to WordPress sites.",
+  "main": "assets/js/index.js",
   "scripts": {
     "build": "wp-scripts build assets/js/index.js --output-path=assets/build/",
     "start": "wp-scripts start assets/js/index.js --output-path=assets/build/",

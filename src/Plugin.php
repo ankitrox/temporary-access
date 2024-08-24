@@ -123,7 +123,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function load_translations(): void {
-		load_plugin_textdomain( 'temporary-access', false, basename( plugin()->path ) . '/languages/' . get_locale() );
+		load_plugin_textdomain( 'passwordless-temporary-login', false, basename( plugin()->path ) . '/languages/' . get_locale() );
 	}
 
 	/**

@@ -16,12 +16,12 @@ import UserDetails from './UserDetails';
 const steps = [
 	{
 		id: 'user-details',
-		label: __('User Details', 'temporary-access'),
+		label: __('User Details', 'passwordless-temporary-login'),
 		component: UserDetails,
 	},
 	{
 		id: 'access-details',
-		label: __('Access Details', 'temporary-access'),
+		label: __('Access Details', 'passwordless-temporary-login'),
 		component: AccessDetails,
 	},
 ];

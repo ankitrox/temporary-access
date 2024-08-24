@@ -1,6 +1,7 @@
 <?php
 /**
  * Plugin Name: Passwordless Temporary Login
+ * Description: Provide temporary access to users without password using direct login link.
  * Version: 1.0.0
  * Author: Ankit Gade
  * Author URI: https://iamank.it

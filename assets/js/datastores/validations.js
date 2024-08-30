@@ -6,13 +6,12 @@
  * External dependencies.
  */
 import invariant from 'invariant';
+import { isPlainObject } from 'lodash';
 
 /**
  * WordPress dependencies.
  */
 import { __ } from '@wordpress/i18n';
-
-const { isPlainObject } = lodash;
 
 export const validateUserCreationParams = function (userData) {
 	invariant(

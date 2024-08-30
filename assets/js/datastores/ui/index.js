@@ -21,7 +21,7 @@ import deleteUserStore from './delete';
 import editUserStore from './edit';
 import listUsersStore from './list';
 
-const store = combineStores(
+export const store = combineStores(
 	contextStore,
 	editUserStore,
 	deleteUserStore,

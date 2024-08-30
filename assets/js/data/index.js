@@ -2,7 +2,7 @@
  * Utility functions.
  */
 
-const { unescape } = lodash;
+import { unescape } from 'lodash';
 
 /**
  * Internal dependencies

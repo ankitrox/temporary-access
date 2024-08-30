@@ -6,6 +6,7 @@
  * External dependencies.
  */
 import invariant from 'invariant';
+import { isPlainObject } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -16,8 +17,6 @@ import {
 	camelCaseToConstantCase,
 } from '../utils/transform-case';
 import { stringifyObject } from '../utils/stringify';
-
-const { isPlainObject } = lodash;
 
 const defaultReducerCallback = (state) => state;
 

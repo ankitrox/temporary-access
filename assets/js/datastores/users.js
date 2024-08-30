@@ -11,8 +11,7 @@ import { combineStores, passthroughReducer } from '../data/utils';
 import { validateUserCreationParams, validateUserID } from './validations';
 import { stringifyObject } from '../utils/stringify';
 import invariant from 'invariant';
-
-const { isPlainObject } = lodash;
+import { isPlainObject } from 'lodash';
 
 const fetchGetUsers = createFetchStore({
 	baseName: 'getUsers',

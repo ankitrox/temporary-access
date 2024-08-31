@@ -5,7 +5,6 @@
 import { render } from 'test-utils';
 import Notices from './Notices';
 import { STORE_NAME } from '../datastores/constants';
-import { prettyDOM } from '@testing-library/dom';
 
 describe('Notices', () => {
 	it('should render a notice', async () => {

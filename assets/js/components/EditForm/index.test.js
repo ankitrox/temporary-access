@@ -2,7 +2,7 @@
  * Editform component tests.
  */
 
-import { createTestRegistry, render } from 'test-utils';
+import { act, createTestRegistry, render, fireEvent } from 'test-utils';
 import EditForm from './index';
 import { UI_STORE_NAME } from '../../datastores/constants';
 import { prettyDOM } from '@testing-library/dom';
@@ -44,6 +44,31 @@ describe('EditForm', () => {
 		});
 	});
 
+	describe('displays errors', () => {
+		it('should display email and name errors', async () => {
+			registry.dispatch(UI_STORE_NAME).setStep(0);
+			registry.dispatch(UI_STORE_NAME).setContext('edit');
+
+			const { getByRole, getByText, waitForRegistry } = render(
+				<EditForm />,
+				{
+					registry,
+				}
+			);
+
+			await waitForRegistry();
+
+			const createUserCTA = getByRole('button', { name: /Next/i });
+
+			act(() => {
+				fireEvent.click(createUserCTA);
+			});
+
+			expect(getByText(/Invalid email/)).toBeInTheDocument();
+			expect(getByText(/Invalid first name/)).toBeInTheDocument();
+		});
+	});
+
 	describe('renders the modal', () => {
 		it('when context is edit and step count is valid', async () => {
 			registry.dispatch(UI_STORE_NAME).setStep(0);
@@ -67,6 +92,37 @@ describe('EditForm', () => {
 
 			const inActiveStepper = getByText('Access Details');
 			expect(inActiveStepper).not.toHaveClass('Mui-active');
+		});
+
+		it('should display next step when valid data is entered and next is clicked', async () => {
+			registry.dispatch(UI_STORE_NAME).setStep(0);
+			registry.dispatch(UI_STORE_NAME).setContext('edit');
+
+			const { getByRole, getByLabelText, getByText, waitForRegistry } =
+				render(<EditForm />, {
+					registry,
+				});
+
+			await waitForRegistry();
+
+			const createUserCTA = getByRole('button', { name: /Next/i });
+
+			act(() => {
+				fireEvent.change(getByLabelText(/Email/i), {
+					target: { value: 'user@domain.com' },
+				});
+				fireEvent.change(getByLabelText(/First Name/i), {
+					target: { value: 'User' },
+				});
+				fireEvent.change(getByLabelText(/Last Name/i), {
+					target: { value: 'Name' },
+				});
+
+				fireEvent.click(createUserCTA);
+			});
+
+			const activeStepper = getByText('Access Details');
+			expect(activeStepper).toHaveClass('Mui-active');
 		});
 	});
 });

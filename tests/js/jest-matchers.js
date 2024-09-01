@@ -4,5 +4,11 @@
 import '@testing-library/jest-dom';
 
 global.tempAccess = {
-	roles: ['administrator', 'editor', 'author', 'contributor', 'subscriber'],
+	roles: {
+		administrator: 'Administrator',
+		editor: 'Editor',
+		contributor: 'Contributor',
+		subscriber: 'Subscriber',
+	},
+	path: '/tempaccess/v1/users/',
 };

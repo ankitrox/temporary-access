@@ -56,14 +56,14 @@ export default function AccessDetails() {
 			startDate: {
 				validationFn: isValidDate,
 				errorMessage: __(
-					'Invalid date',
+					'Invalid start date',
 					'passwordless-temporary-login'
 				),
 			},
 			endDate: {
 				validationFn: isValidDate,
 				errorMessage: __(
-					'Invalid date',
+					'Invalid end date',
 					'passwordless-temporary-login'
 				),
 			},

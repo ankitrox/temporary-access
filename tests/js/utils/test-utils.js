@@ -7,6 +7,7 @@
  */
 import invariant from 'invariant';
 import { render, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 /**
  * WordPress dependencies
@@ -98,3 +99,5 @@ export * from './utils';
 export * from '@testing-library/react';
 
 export { customRender as render };
+
+export { userEvent };

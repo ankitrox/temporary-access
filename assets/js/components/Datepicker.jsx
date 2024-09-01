@@ -47,6 +47,9 @@ export default function Datepicker({
 					onChange={onChange}
 				/>
 			)}
+			popoverProps={{
+				'data-testid': 'datepickerPopover',
+			}}
 		></Dropdown>
 	);
 }

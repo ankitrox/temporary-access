@@ -94,6 +94,13 @@ const customRender = (ui, options = {}) => {
 	};
 };
 
+export function WithTestRegistry({
+	children,
+	registry = createTestRegistry(),
+} = {}) {
+	return <RegistryProvider value={registry}>{children}</RegistryProvider>;
+}
+
 export * from './utils';
 
 export * from '@testing-library/react';

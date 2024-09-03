@@ -15,7 +15,7 @@
     "test:js": "jest --config=tests/js/jest.config.js --passWithNoTests",
     "test:js:watch": "npm run test:js -- --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build -c .storybook -o dist --quiet --loglevel warn"
   },
   "author": "",
   "license": "ISC",
@@ -29,6 +29,7 @@
     "@storybook/addon-postcss": "^2.0.0",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
     "@storybook/blocks": "^8.2.9",
+    "@storybook/cli": "^8.2.9",
     "@storybook/react": "^8.2.9",
     "@storybook/react-webpack5": "^8.2.9",
     "@storybook/test": "^8.2.9",

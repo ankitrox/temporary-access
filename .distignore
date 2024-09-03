@@ -10,6 +10,7 @@ tests/php-coverage
 .phpunit.result.cache
 tests/e2e/test-results
 built-plugin
+storybook-static
 
 # Directories/files that may appear in your environment
 .DS_Store

@@ -44,7 +44,10 @@ export default function DeleteConfirmation() {
 
 			setNotice({
 				code: 'user_deleted',
-				message: __('User deleted successfully', 'passwordless-temporary-login'),
+				message: __(
+					'User deleted successfully',
+					'passwordless-temporary-login'
+				),
 				noticeType: 'success',
 			});
 

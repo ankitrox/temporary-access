@@ -27,7 +27,10 @@ export default function RowActions({ user }) {
 		setNotice({
 			code: 'link-copied',
 			noticeType: 'success',
-			message: __('Link copied to clipboard', 'passwordless-temporary-login'),
+			message: __(
+				'Link copied to clipboard',
+				'passwordless-temporary-login'
+			),
 		});
 	};
 

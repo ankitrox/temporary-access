@@ -2,6 +2,7 @@
 
 // WordPress component styles.
 import '../node_modules/@wordpress/components/build-style/style.css';
+import '../tests/js/utils/global-setup';
 
 const preview = {
 	parameters: {

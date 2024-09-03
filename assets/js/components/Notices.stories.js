@@ -24,7 +24,7 @@ Default.args = {
 	setupRegistry: (registry) => {
 		registry.dispatch(STORE_NAME).setNotice({
 			code: 'test-notice',
-			message: 'This is the information notice',
+			message: 'This is the example notice',
 			noticeType: 'success',
 		});
 	},

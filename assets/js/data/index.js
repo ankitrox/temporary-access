@@ -5,11 +5,6 @@
 import { unescape } from 'lodash';
 
 /**
- * Internal dependencies
- */
-export * from './stringify';
-
-/**
  * Calculates the change between two values.
  *
  * @since 1.24.0

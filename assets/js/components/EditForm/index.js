@@ -85,6 +85,7 @@ export default function EditForm() {
 
 	const onSubmit = async () => {
 		const valid = stepValidationFn();
+
 		if (valid) {
 			clearErrors();
 

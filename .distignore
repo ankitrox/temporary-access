@@ -65,3 +65,6 @@ assets/js/
 assets/sass/
 webpack.config.js
 .babelrc
+*.test.js
+*.stories.js
+*.mdx

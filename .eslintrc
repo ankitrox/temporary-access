@@ -1,9 +1,20 @@
 {
-    "extends": [ "plugin:@wordpress/eslint-plugin/recommended" ],
+    "extends": [ "plugin:@wordpress/eslint-plugin/recommended", "plugin:jest/recommended" ],
     "globals": {
         "tempAccess": "readonly",
         "wp": "readonly",
         "lodash": "readonly",
-        "navigator": "readonly"
+        "navigator": "readonly",
+        "test-utils": "readonly"
+    },
+    "settings" : {
+        "import/resolver": {
+          "node": {
+            "moduleDirectory": [
+                "node_modules",
+                "tests/js/utils"
+            ]
+          }
+        }
     }
 }

@@ -16,5 +16,13 @@
             ]
           }
         }
+    },
+    "parserOptions":{
+      "requireConfigFile": false,
+      "babelOptions": {
+        "presets": [
+          "@wordpress/babel-preset-default"
+        ]
+      }
     }
 }

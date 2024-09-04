@@ -3,12 +3,8 @@ const config = {
 	stories: ['../assets/js/**/*.stories.js'],
 	addons: [
 		'@storybook/addon-webpack5-compiler-swc',
-		'@storybook/addon-onboarding',
-		'@storybook/addon-links',
-		'@storybook/addon-essentials',
-		'@chromatic-com/storybook',
-		'@storybook/addon-interactions',
 		'@storybook/addon-postcss',
+		'@storybook/addon-viewport',
 	],
 	framework: {
 		name: '@storybook/react-webpack5',

@@ -12,7 +12,7 @@ import { Button } from '@mui/material';
  */
 import { __ } from '@wordpress/i18n';
 import { Flex, Modal } from '@wordpress/components';
-import { use, useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies

@@ -139,8 +139,10 @@ class Settings {
 	 * @return string
 	 */
 	public function body_class( string $classes ): string {
-		if ( 'users_page_passwordless-temporary-login' === get_current_screen()->id ) {
-			$classes .= ' tempaccess-plugin';
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		if ( ! $screen || 'users_page_passwordless-temporary-login' === $screen->id ) {
+			return $classes;
 		}
 
 		return $classes;

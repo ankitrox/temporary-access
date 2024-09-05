@@ -12,12 +12,13 @@ import { Button } from '@mui/material';
  */
 import { __ } from '@wordpress/i18n';
 import { Flex, Modal } from '@wordpress/components';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { use, useDispatch, useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
+import { useEffect } from '@wordpress/element';
 
 export default function DeleteConfirmation() {
 	const dispatch = useDispatch();
@@ -56,6 +57,15 @@ export default function DeleteConfirmation() {
 		}
 	};
 
+	useEffect(() => {
+		if (isOpen) {
+			const deleteCancel = document.getElementById(
+				'tempaccess-delete-cancel'
+			);
+			deleteCancel?.focus();
+		}
+	}, [isOpen]);
+
 	return (
 		<>
 			{isOpen && (
@@ -72,11 +82,16 @@ export default function DeleteConfirmation() {
 						)}
 					</p>
 					<Flex>
-						<Button onClick={onCloseModal} variant="outlined">
+						<Button
+							id="tempaccess-delete-cancel"
+							onClick={onCloseModal}
+							variant="outlined"
+						>
 							{__('Cancel', 'passwordless-temporary-login')}
 						</Button>
 
 						<Button
+							id="tempaccess-delete-confirm"
 							variant="outlined"
 							color="error"
 							onClick={onDelete}

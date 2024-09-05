@@ -71,6 +71,13 @@ export default function UserDetails() {
 	};
 
 	useEffect(() => {
+		const emailField = document.querySelector(
+			'.tempaccess-modal-edit-form input[type="email"]'
+		);
+		emailField.focus();
+	}, []);
+
+	useEffect(() => {
 		const getFieldValue = (fieldName) => {
 			switch (fieldName) {
 				case 'email':

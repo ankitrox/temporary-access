@@ -1,5 +1,13 @@
 .tempaccess-plugin {
+    background-color: #FFFFFF;
+
     .tempaccess-modal-edit-form {
         min-width: 350px;
+    }
+
+    .no-users-banner {
+        margin: 100px 0;
+        text-align: center;
+        line-height: 1.5em;
     }
 }

@@ -49,6 +49,23 @@ Default.args = {
 	},
 };
 
+export const NoUsers = Template.bind({});
+NoUsers.storyName = 'NoUsers';
+NoUsers.args = {
+	setupRegistry: (registry) => {
+		registry.dispatch(STORE_NAME).receiveGetUsers(
+			{
+				users: [],
+				totalUsers: 0,
+			},
+			{
+				page: 1,
+				pageSize: 5,
+			}
+		);
+	},
+};
+
 export default {
 	title: 'Components/UsersTable',
 	decorators: [

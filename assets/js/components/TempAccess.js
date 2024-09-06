@@ -5,6 +5,7 @@
 /**
  * WordPress dependencies
  */
+import { TabPanel } from '@wordpress/components';
 import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -19,15 +20,41 @@ import DeleteConfirmation from './DeleteConfirmation';
 
 export default function TempAccess() {
 	return (
-		<div className="tempaccess">
-			<h1>{__('Passwordless Temporary Login', 'temp-access')}</h1>
-			<Notices />
-			<Fragment>
-				<AddUserCTA />
-				<UsersTable />
-				<EditForm />
-				<DeleteConfirmation />
-			</Fragment>
-		</div>
+		<TabPanel
+			className="tempaccess-tab-panel"
+			tabs={[
+				{
+					name: 'users',
+					title: __('Users', 'passwordless-temporary-login'),
+					className: 'passwordless-temporary-login-users-tab',
+				},
+				{
+					name: 'settings',
+					title: __('Settings', 'passwordless-temporary-login'),
+					className: 'passwordless-temporary-login-settings-tab',
+				},
+			]}
+		>
+			{(tab) => {
+				switch (tab.name) {
+					case 'users':
+						return (
+							<Fragment>
+								<Notices />
+								<AddUserCTA />
+								<UsersTable />
+								<EditForm />
+								<DeleteConfirmation />
+							</Fragment>
+						);
+					case 'settings':
+						return (
+							<Fragment>
+								<EditForm />
+							</Fragment>
+						);
+				}
+			}}
+		</TabPanel>
 	);
 }

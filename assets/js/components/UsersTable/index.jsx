@@ -10,6 +10,9 @@ import { DataGrid } from '@mui/x-data-grid';
 /**
  * Wordpress dependencies.
  */
+import { createInterpolateElement } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
+import { Button } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 
 /**
@@ -20,7 +23,7 @@ import { DataColumns, getDataRows } from './TableData';
 import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function UsersTable() {
-	const { setPageModal } = useDispatch(UI_STORE_NAME);
+	const { setPageModal, setContext } = useDispatch(UI_STORE_NAME);
 	const paginationModel = useSelect((select) =>
 		select(UI_STORE_NAME).getPageModal()
 	);
@@ -50,7 +53,27 @@ export default function UsersTable() {
 
 	// Return early if there are no users.
 	if (!Array.isArray(users) || users.length === 0) {
-		return null;
+		return (
+			<div className="no-users-banner">
+				<h2>{__('No users found.', 'passwordless-temporary-login')}</h2>
+				<p>
+					{createInterpolateElement(
+						__(
+							'<button>Create your first temporary user</button>',
+							'passwordless-temporary-login'
+						),
+						{
+							button: (
+								<Button
+									onClick={() => setContext('edit')}
+									variant={'secondary'}
+								/>
+							),
+						}
+					)}
+				</p>
+			</div>
+		);
 	}
 
 	const onPaginationModalChange = (newPaginationModel) => {

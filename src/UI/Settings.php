@@ -142,6 +142,7 @@ class Settings {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 
 		if ( ! $screen || 'users_page_passwordless-temporary-login' === $screen->id ) {
+			$classes .= ' tempaccess-plugin';
 			return $classes;
 		}
 

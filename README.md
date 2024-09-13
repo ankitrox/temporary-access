@@ -29,3 +29,12 @@ Temporary Access plugin will take care of these things automatically for you.
 3. Best code quality. SOLID principles used during development.
 4. Active support and maintenance.
 5. Open source.
+
+## Usage
+
+1. Clone this repository into WordPress's plugin directory (e.g.: wp-content/plugins/) `https://github.com/ankitrox/temporary-access.git`
+2. Go to the directory, `cd temporary-access` (replace the name of directory if you have changed at the time of clone).
+3. Run following command
+```bash
+npm ci && npm run build && composer install
+```

@@ -8,6 +8,13 @@
 import invariant from 'invariant';
 
 /**
+ * WordPress dependencies
+ */
+import { createHooks } from '@wordpress/hooks';
+
+export const tempAccessHooks = createHooks();
+
+/**
  * Collects and combines multiple objects of similar shape.
  *
  * Used to combine objects like actions, selectors, etc. for a data

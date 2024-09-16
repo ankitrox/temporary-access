@@ -23,8 +23,7 @@ use Exception;
  *
  * @package Ankit\TemporaryAccess\REST
  */
-class TempUser {
-
+class TempUser extends Base {
 
 	/**
 	 * Endpoint namespace.
@@ -64,9 +63,7 @@ class TempUser {
 	 * @return void
 	 */
 	public function register(): void {
-
-		register_rest_route(
-			self::NAMESPACE,
+		$this->register_route(
 			'/users',
 			array(
 				array(
@@ -77,13 +74,10 @@ class TempUser {
 					'methods'  => WP_REST_Server::CREATABLE,
 					'callback' => array( $this, 'create_user' ),
 				),
-				'permission_callback' => array( $this, 'permission_check' ),
-				'args'                => array(),
 			)
 		);
 
-		register_rest_route(
-			self::NAMESPACE,
+		$this->register_route(
 			'/users/(?P<ID>\d+)',
 			array(
 				array(
@@ -98,8 +92,6 @@ class TempUser {
 					'methods'  => WP_REST_Server::DELETABLE,
 					'callback' => array( $this, 'delete_user' ),
 				),
-				'permission_callback' => array( $this, 'permission_check' ),
-				'args'                => array(),
 			)
 		);
 	}

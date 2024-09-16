@@ -12,6 +12,7 @@ import { useDispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { tempAccessHooks } from '../../data/utils';
 import { STORE_NAME, UI_STORE_NAME } from '../../datastores/constants';
 
 export default function RowActions({ user }) {
@@ -44,26 +45,37 @@ export default function RowActions({ user }) {
 		setUserForDeletion(user);
 	};
 
-	return (
-		<div className="tempuser-actions">
+	const actions = tempAccessHooks.applyFilters(
+		'tempAccess.rowActions',
+		[
 			<Button
 				icon="edit"
 				title={__('Edit', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={onEdit}
-			/>
+				key={'row-action-edit'}
+			/>,
 			<Button
 				icon="trash"
 				title={__('Delete', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={onDelete}
-			/>
+				key={'row-action-delete'}
+			/>,
 			<Button
 				icon="admin-links"
 				title={__('Copy link', 'passwordless-temporary-login')}
 				isPressed={false}
 				onClick={() => onCopyLink(user)}
-			/>
+				key={'row-action-copy-link'}
+			/>,
+		],
+		user
+	);
+
+	return (
+		<div className="tempuser-actions">
+			{actions.map((action) => ({ ...action }))}
 		</div>
 	);
 }
